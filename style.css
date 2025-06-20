@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: black;
+    color: yellow;
+    font-weight: bolder;
+}
+header h1, h2 {
+    text-align: center;
+    padding: 10px;
+    font-size: 2em;
+}
+
+header, a {
+    text-align: left;
+    font-size: 1em;
+    text-decoration: none;
+    color: white;
+    padding: 5px;
+}
+
+a:hover{
+    text-decoration: underline;
+}
