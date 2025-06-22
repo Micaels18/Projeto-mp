@@ -3,26 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Matéria Prima Triunfo</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+    <!-- Header -->
     <header>
-        <img src="ChatGPT Image 21 de jun. de 2025, 02_10_17.png" alt="banner" class="banner">
-        <nav class="nav">
-            <a href="#">Home</a>
-            <a href="#">Produtos</a>
-            <a href="#">Sobre nós</a>
-            <a href="#">Contato</a>
-            <a href="#">Carrinho</a>
-        </nav>
-</header>
-    <main>
-        <section>
+        <div class="container">
+            <div class="logo">Matéria Prima <span>Triunfo</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#produtos">Produtos</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+            <div class="carrinho-icon" onclick="abrirCarrinho()">
+                🛒 <span id="quantidade-carrinho">0</span>
+            </div>
+        </div>
+    </header>
 
-        </section>
-    </main>
-   
+    <!-- Banner -->
+    <section class="banner" id="home">
+        <div class="slide">
+            <img src="imgs/" alt="Banner 1">
+        </div>
+    </section>
 
+    <!-- Categorias -->
+    <section class="categorias">
+        <div class="container">
+            <button onclick="filtrarCategoria('todos')">Todos</button>
+            <button onclick="filtrarCategoria('whey')">Whey</button>
+            <button onclick="filtrarCategoria('creatina')">Creatina</button>
+            <button onclick="filtrarCategoria('pre-treino')">Pré-treino</button>
+        </div>
+    </section>
+
+    <!-- Produtos -->
+    <section class="produtos" id="produtos">
+        <div class="container">
+
+            <!-- Produto -->
+            <div class="card" data-categoria="whey">
+                <img src="images/whey.png" alt="Whey Protein">
+                <h3>Whey Protein Athletica</h3>
+                <p>Suplemento de proteína para ganho de massa muscular.</p>
+                <span>R$ 129,90</span>
+                <button onclick="adicionarAoCarrinho('Whey Protein', 149.90)">Adicionar</button>
+            </div>
+
+            <div class="card" data-categoria="creatina">
+                <img src="images/creatina.png" alt="Creatina">
+                <h3>Creatina Matéria Prima</h3>
+                <p>Mais força, resistência e performance nos treinos.</p>
+                <span>R$ 49,90</span>
+                <button onclick="adicionarAoCarrinho('Creatina', 89.90)">Adicionar</button>
+            </div>
+
+            <div class="card" data-categoria="pre-treino">
+                <img src="images/pre-treino.png" alt="Pré-treino">
+                <h3>Pré-Treino Pancada</h3>
+                <p>Energia explosiva para treinos de alto desempenho.</p>
+                <span>R$ 79,90</span>
+                <button onclick="adicionarAoCarrinho('Pré-Treino Insano', 119.90)">Adicionar</button>
+            </div>
+
+            <!-- Adiciona mais produtos aqui -->
+        </div>
+    </section>
+
+    <!-- Carrinho -->
+    <div id="carrinho" class="carrinho">
+        <h2>Seu Carrinho</h2>
+        <ul id="lista-carrinho"></ul>
+        <p>Total: <span id="total">R$ 0,00</span></p>
+        <button onclick="fecharCarrinho()">Fechar</button>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contato">
+        <div class="container">
+            <p>&copy; 2025 Matéria Prima Triunfo - Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+<script src="js/script.js"></script>
 </body>
 </html>

@@ -1,0 +1,220 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Raleway", sans-serif;
+}
+
+body {
+    font-family: "Raleway", sans-serif;
+    background-color: #121212;
+    color: #fff;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+/* Header */
+header {
+    background-color: #000;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    border-bottom: 3px solid #FFD700;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.logo span {
+    color: #FFD700;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #FFD700;
+}
+
+.carrinho-icon {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* Banner */
+.banner {
+    width: 100%;
+    height: 300px;
+    background-color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Categorias */
+.categorias {
+    padding: 20px 0;
+    text-align: center;
+    background-color: #1a1a1a;
+}
+
+.categorias button {
+    background-color: #FFD700;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.categorias button:hover {
+    background-color: #e6c200;
+}
+
+/* Produtos */
+.produtos {
+    padding: 40px 0;
+}
+
+.produtos .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+}
+
+.card h3 {
+    margin: 10px 0;
+}
+
+.card p {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.card span {
+    display: block;
+    margin: 10px 0;
+    font-size: 18px;
+    color: #FFD700;
+}
+
+.card button {
+    background-color: #FFD700;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.card button:hover {
+    background-color: #e6c200;
+}
+
+/* Carrinho */
+.carrinho {
+    position: fixed;
+    top: 60px;
+    right: -400px;
+    width: 300px;
+    background-color: #000;
+    border-left: 3px solid #FFD700;
+    padding: 20px;
+    height: calc(100% - 60px);
+    transition: 0.5s;
+    overflow-y: auto;
+}
+
+.carrinho.aberto {
+    right: 0;
+}
+
+.carrinho h2 {
+    margin-bottom: 20px;
+}
+
+.carrinho ul {
+    list-style: none;
+}
+
+.carrinho li {
+    margin-bottom: 10px;
+}
+
+.carrinho button {
+    background-color: #FFD700;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.carrinho button:hover {
+    background-color: #e6c200;
+}
+
+/* Footer */
+footer {
+    background-color: #000;
+    padding: 20px 0;
+    text-align: center;
+    border-top: 3px solid #FFD700;
+}
+
+
+
