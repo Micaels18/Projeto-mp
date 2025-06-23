@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Todos os Produtos</title>
+  <link rel="stylesheet" href="css/produtos.css">
+</head>
+<body>
+  <header>
+        <div class="container">
+            <div class="logo">Matéria Prima <span>Triunfo</span></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="produtos.html">Produtos</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+            <div class="carrinho-icon" onclick="abrirCarrinho()">
+                🛒 <span id="quantidade-carrinho">0</span>
+            </div>
+        </div>
+    </header>
+  <aside id="carrinho" class="carrinho">
+  <button class="fechar" onclick="fecharCarrinho()">Fechar</button>
+  <h2>Seu Carrinho</h2>
+  <ul id="lista-carrinho"></ul>
+  <div class="total">
+    Total: <span id="total">R$ 0,00</span>
+  </div>
+</aside>
+
+<main>
+  <section class="filtro">
+    <label for="categoria-select">Filtrar por categoria:</label>
+    <select id="categoria-select">
+      <option value="todos">Todas</option>
+      <option value="whey">Whey Protein</option>
+      <option value="creatina">Creatina</option>
+      <option value="pre-treino">Pré-Treino</option>
+    </select>
+  </section>
+
+  <div class="grid-produtos">
+    <div class="card" data-categoria="whey">
+      <img src="imgs/whey-probiotica.png" alt="Whey Protein">
+      <h3>Whey Protein Probiótica</h3>
+      <p>Suplemento de proteína...</p>
+      <span>R$ 129,90</span>
+      <button onclick="adicionarAoCarrinho('Whey Protein', 129.90)">
+        Adicionar
+      </button>
+    </div>
+
+    <div class="card" data-categoria="creatina">
+      <img src="imgs/Creatina-mp.png" alt="Creatina">
+      <h3>Creatina Matéria Prima</h3>
+      <p>Mais força e resistência.</p>
+      <span>R$ 49,90</span>
+      <button onclick="adicionarAoCarrinho('Creatina', 49.90)">
+        Adicionar
+      </button>
+    </div>
+
+    <div class="card" data-categoria="pre-treino">
+      <img src="imgs/pancada.png" alt="pancada">
+      <h3>Pré treino Pancada</h3>
+      <p>Sabor Frutas Amarelas</p>
+      <span>R$ 79,90</span>
+      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
+    </div>
+    <div class="card" data-categoria="pre-treino">
+      <img src="imgs/pancada.png" alt="pancada">
+      <h3>Pré treino Pancada</h3>
+      <p>Sabor Frutas Amarelas</p>
+      <span>R$ 79,90</span>
+      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="pre-treino">
+      <img src="imgs/pancada.png" alt="pancada">
+      <h3>Pré treino Pancada</h3>
+      <p>Sabor Frutas Amarelas</p>
+      <span>R$ 79,90</span>
+      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="pre-treino">
+      <img src="imgs/pancada.png" alt="pancada">
+      <h3>Pré treino Pancada</h3>
+      <p>Sabor Frutas Amarelas</p>
+      <span>R$ 79,90</span>
+      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="pre-treino">
+      <img src="imgs/pancada.png" alt="pancada">
+      <h3>Pré treino Pancada</h3>
+      <p>Sabor Frutas Amarelas</p>
+      <span>R$ 79,90</span>
+      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
+    </div>
+
+    <div class="card" data-categoria="pre-treino">
+      <img src="imgs/pancada.png" alt="pancada">
+      <h3>Pré treino Pancada</h3>
+      <p>Sabor Frutas Amarelas</p>
+      <span>R$ 79,90</span>
+      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
+    </div>
+    <div class="card" data-categoria="pre-treino">
+      <img src="imgs/pancada.png" alt="pancada">
+      <h3>Pré treino Pancada</h3>
+      <p>Sabor Frutas Amarelas</p>
+      <span>R$ 79,90</span>
+      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
+    </div>
+    <div class="card" data-categoria="pre-treino">
+      <img src="imgs/pancada.png" alt="pancada">
+      <h3>Pré treino Pancada</h3>
+      <p>Sabor Frutas Amarelas</p>
+      <span>R$ 79,90</span>
+      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
+    </div>
+
+    <!-- repita para cada produto -->
+  </div>
+</main>
+
+<footer id="contato">
+        <div class="container">
+            <p>&copy; 2025 Matéria Prima Triunfo - Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+<script src="js/script.js" defer></script>
+</body>
+</html>
