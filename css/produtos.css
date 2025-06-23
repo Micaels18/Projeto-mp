@@ -161,6 +161,7 @@ nav ul li a:hover {
     cursor: pointer;
     border-radius: 5px;
     transition: 0.3s;
+    margin-top: 5px;
 }
 
 .card button:hover {
@@ -210,7 +211,6 @@ nav ul li a:hover {
 
 .carrinho button:hover {
     background-color: #e6c200;
-    transform: translate(-3px, -3px);
 }
 
 /* Footer */
@@ -221,7 +221,60 @@ footer {
     border-top: 3px solid #FFD700;
 }
 
+/* 1. Header fixo */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;           /* ajuste para a altura real do seu header */
+  background: #000;       /* ou a cor de fundo que você usa */
+  z-index: 1000;
+}
 
+/* Zera margens/paddings padrão pra evitar “sulcos” */
+body, html {
+  margin: 0;
+  padding: 0;
+}
 
+/* 2. Empurra todo o conteúdo abaixo do header */
+main {
+  padding-top: 70px;      /* igual à altura do header */
+}
 
+/* 3. Espaçamento da seção de filtro */
+.filtro {
+  margin: 1.5rem auto 0;  /* 1.5rem em cima (já abaixo do header), 0 embaixo */
+  max-width: 1200px;      /* opcional: centraliza e limita largura */
+  position: relative;
+  z-index: 10;            /* acima da grid, porém abaixo do header */
+}
 
+/* 4. Grid de produtos “desgrudada” do filtro */
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem auto;      /* 1rem de distância da seção de filtro, centraliza */
+  max-width: 1200px;      /* cascate com .filtro pra alinhar */
+}
+
+/* 5. Cards de produto (só pra referência) */
+.produto {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  transition: box-shadow .3s;
+}
+.produto:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.produto img {
+  width: 100%;
+  display: block;
+}

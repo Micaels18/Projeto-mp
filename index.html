@@ -15,7 +15,7 @@
             <nav>
                 <ul>
                     <li><a href="#home">Início</a></li>
-                    <li><a href="#produtos">Produtos</a></li>
+                    <li><a href="produtos.html">Produtos</a></li>
                     <li><a href="#contato">Contato</a></li>
                 </ul>
             </nav>
@@ -28,7 +28,7 @@
     <!-- Banner -->
     <section class="banner" id="home">
         <div class="slide">
-            <img src="imgs/" alt="Banner 1">
+            <img src="imgs/Shop Now.png" alt="Banner 1">
         </div>
     </section>
 
@@ -41,22 +41,22 @@
             <button onclick="filtrarCategoria('pre-treino')">Pré-treino</button>
         </div>
     </section>
-
+    <h1 style="text-align: center; font-family: Arial, Helvetica, sans-serif;">Produtos em destaque</h1>
     <!-- Produtos -->
     <section class="produtos" id="produtos">
         <div class="container">
 
             <!-- Produto -->
             <div class="card" data-categoria="whey">
-                <img src="images/whey.png" alt="Whey Protein">
-                <h3>Whey Protein Athletica</h3>
+                <img src="imgs/whey-probiotica.png" alt="Whey Protein">
+                <h3>Whey Protein Probiótica</h3>
                 <p>Suplemento de proteína para ganho de massa muscular.</p>
                 <span>R$ 129,90</span>
                 <button onclick="adicionarAoCarrinho('Whey Protein', 149.90)">Adicionar</button>
             </div>
 
             <div class="card" data-categoria="creatina">
-                <img src="images/creatina.png" alt="Creatina">
+                <img src="imgs/Creatina-mp.png" alt="Creatina">
                 <h3>Creatina Matéria Prima</h3>
                 <p>Mais força, resistência e performance nos treinos.</p>
                 <span>R$ 49,90</span>
@@ -64,12 +64,21 @@
             </div>
 
             <div class="card" data-categoria="pre-treino">
-                <img src="images/pre-treino.png" alt="Pré-treino">
+                <img src="imgs/pancada.png" alt="Pré-treino">
                 <h3>Pré-Treino Pancada</h3>
                 <p>Energia explosiva para treinos de alto desempenho.</p>
                 <span>R$ 79,90</span>
                 <button onclick="adicionarAoCarrinho('Pré-Treino Insano', 119.90)">Adicionar</button>
             </div>
+
+            <div class="card" data-categoria="creatina">
+                <img src="imgs/creatina-3vs.png" alt="creatina-3vs">
+                <h3>Creatina 100% Pura 3VS</h3>
+                <p>Creatin Pura para aumentar seu desempenho</p>
+                <span>R$ 79,90</span>
+                <button onclick="adicionarAoCarrinho('creatina', 79.90)">Adicionar</button>
+            </div>
+
 
             <!-- Adiciona mais produtos aqui -->
         </div>
