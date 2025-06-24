@@ -12,9 +12,8 @@ const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN 
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
-// Rota para criar preferência de pagamento
+// Rotas da API
 app.post('/api/create_preference', async (req, res) => {
   console.log('Rota /api/create_preference chamada!');
   console.log('Body recebido:', req.body);
@@ -40,7 +39,6 @@ app.post('/api/create_preference', async (req, res) => {
   }
 });
 
-// Rota para salvar pedido
 app.post('/api/pedido', (req, res) => {
   const pedido = req.body;
   const pedidosPath = path.join(__dirname, 'pedidos.json');
@@ -54,7 +52,6 @@ app.post('/api/pedido', (req, res) => {
   res.status(201).json({ message: 'Pedido salvo com sucesso!' });
 });
 
-// Rota de cadastro
 app.post('/api/cadastro', (req, res) => {
   const { nome, email, senha, endereco, cep } = req.body;
   const usuariosPath = path.join(__dirname, 'usuarios.json');
@@ -71,7 +68,6 @@ app.post('/api/cadastro', (req, res) => {
   res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
 });
 
-// Rota de login
 app.post('/api/login', (req, res) => {
   const { email, senha } = req.body;
   const usuariosPath = path.join(__dirname, 'usuarios.json');
@@ -86,7 +82,6 @@ app.post('/api/login', (req, res) => {
   res.json({ message: 'Login realizado com sucesso!' });
 });
 
-// Rota para obter o nome do usuário pelo e-mail
 app.get('/api/usuario_nome', (req, res) => {
   const email = req.query.email;
   const usuariosPath = path.join(__dirname, 'usuarios.json');
@@ -100,6 +95,9 @@ app.get('/api/usuario_nome', (req, res) => {
   }
   res.json({ nome: usuario.nome });
 });
+
+// Só depois das rotas da API:
+app.use(express.static('public'));
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
