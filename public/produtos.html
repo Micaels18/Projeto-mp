@@ -21,6 +21,7 @@
             </div>
         </div>
     </header>
+  <div id="usuario-logado" style="margin-left:20px;"></div>
   <aside id="carrinho" class="carrinho">
   <button class="fechar" onclick="fecharCarrinho()">Fechar</button>
   <button id="btn-checkout">Finalizar Compra</button>
@@ -55,16 +56,27 @@
 
 <script src="js/script.js" defer></script>
 <script>
-  function renderBotaoAdmin() {
-    if (window.isAdmin) {
-      document.getElementById('admin-cadastrar-produto').innerHTML = `<button style='background:#FFD700;color:#181818;font-weight:bold;padding:12px 24px;border-radius:6px;margin:18px 0 18px 0;cursor:pointer;font-size:17px;border:none;' onclick=\"window.location.href='admin.html'\">Cadastrar Produto</button>`;
+  // Exibe nome do usuário logado e botão de logout
+  document.addEventListener('DOMContentLoaded', async () => {
+    const usuarioEmail = localStorage.getItem('usuario');
+    const el = document.getElementById('usuario-logado');
+    if (usuarioEmail && el) {
+      let nome = localStorage.getItem('usuario_nome');
+      if (!nome) {
+        try {
+          const res = await fetch('/api/usuario_nome?email=' + encodeURIComponent(usuarioEmail));
+          if (res.ok) {
+            const data = await res.json();
+            nome = data.nome;
+            localStorage.setItem('usuario_nome', nome);
+          }
+        } catch {}
+      }
+      el.innerHTML = `Bem-vindo, <b>${nome || usuarioEmail}</b> <button onclick="logout()">Sair</button>`;
+    } else if (el) {
+      el.innerHTML = `<a href="login.html">Entrar</a> | <a href="cadastro.html">Cadastrar</a>`;
     }
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderBotaoAdmin);
-  } else {
-    renderBotaoAdmin();
-  }
+  });
 </script>
 </body>
 </html>

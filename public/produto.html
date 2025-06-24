@@ -213,7 +213,14 @@
         if (el) el.innerHTML = 'Admin <button onclick="logout()">Sair</button>';
       }
     }
-    renderProdutoPage();
+    
+    // Aguarda o script.js carregar antes de renderizar
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderProdutoPage);
+    } else {
+      // Pequeno delay para garantir que window.isAdmin esteja definido
+      setTimeout(renderProdutoPage, 100);
+    }
 
     // Exibe nome do usuário logado e botão de logout
     document.addEventListener('DOMContentLoaded', async () => {
@@ -238,11 +245,6 @@
         el.innerHTML = `<a href="login.html">Entrar</a> | <a href="cadastro.html">Cadastrar</a>`;
       }
     });
-    function logout() {
-      localStorage.removeItem('usuario');
-      localStorage.removeItem('usuario_nome');
-      window.location.reload();
-    }
   </script>
 </body>
 </html> 

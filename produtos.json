@@ -1,1 +1,44 @@
-[] 
+[
+  {
+    "id": 1,
+    "nome": "Whey Protein Probiótica",
+    "marca": "Probiótica",
+    "preco": 129.9,
+    "preco_avista": 119.9,
+    "descricao": "Suplemento de proteína para ganho de massa muscular.",
+    "descricao_longa": "O Whey Protein Probiótica é ideal para quem busca aumento de massa muscular e recuperação pós-treino. Rico em proteínas de alto valor biológico, auxilia no desenvolvimento muscular e na manutenção da saúde.",
+    "imagem": "imgs/whey-probiotica.png",
+    "sabores": [
+      "Baunilha",
+      "Chocolate",
+      "Morango"
+    ],
+    "tamanhos": [
+      "900g"
+    ],
+    "estoque": 10,
+    "relacionados": [
+      2
+    ]
+  },
+  {
+    "id": 2,
+    "nome": "Creatina 100% Pura Refil (300g)",
+    "marca": "Matéria Prima",
+    "preco": 49.9,
+    "preco_avista": 45.7,
+    "descricao": "Creatina pura para aumentar seu desempenho.",
+    "descricao_longa": "Creatina pura, ideal para atletas e praticantes de atividades físicas.",
+    "imagem": "imgs/creatina-mp.png",
+    "sabores": [
+      "Natural"
+    ],
+    "tamanhos": [
+      "300g"
+    ],
+    "estoque": 15,
+    "relacionados": [
+      1
+    ]
+  }
+]

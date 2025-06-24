@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Upload</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #121212; color: #fff; }
+    .upload-box { background: #222; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    input[type="file"] { background: #fff; color: #000; padding: 10px; border-radius: 5px; }
+    button { background: #FFD700; color: #000; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 10px 0; }
+    .preview { max-width: 200px; max-height: 200px; margin: 10px 0; }
+    .result { background: #333; padding: 10px; border-radius: 5px; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>Teste de Upload de Imagem</h1>
+  
+  <div class="upload-box">
+    <h3>Upload Simples</h3>
+    <input type="file" id="testFile" accept="image/*">
+    <button onclick="testarUpload()">Fazer Upload</button>
+    <div id="result"></div>
+    <img id="preview" class="preview" style="display:none;">
+  </div>
+  
+  <div class="upload-box">
+    <h3>Status do Servidor</h3>
+    <button onclick="verificarServidor()">Verificar Servidor</button>
+    <div id="serverStatus"></div>
+  </div>
+
+  <script>
+    async function testarUpload() {
+      const fileInput = document.getElementById('testFile');
+      const resultDiv = document.getElementById('result');
+      const previewImg = document.getElementById('preview');
+      
+      if (!fileInput.files[0]) {
+        resultDiv.innerHTML = '<div class="result" style="color:red;">Selecione um arquivo primeiro!</div>';
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      console.log('Arquivo selecionado:', file);
+      
+      // Preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewImg.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+      
+      // Upload
+      const formData = new FormData();
+      formData.append('imagem', file);
+      
+      resultDiv.innerHTML = '<div class="result" style="color:yellow;">Fazendo upload...</div>';
+      
+      try {
+        const response = await fetch('/api/upload-imagem', {
+          method: 'POST',
+          body: formData
+        });
+        
+        console.log('Response status:', response.status);
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        if (response.ok) {
+          resultDiv.innerHTML = `
+            <div class="result" style="color:green;">
+              ✅ Upload realizado com sucesso!<br>
+              URL: ${data.url}<br>
+              <img src="${data.url}" style="max-width:100px;max-height:100px;margin-top:10px;">
+            </div>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <div class="result" style="color:red;">
+              ❌ Erro no upload: ${data.error}
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        resultDiv.innerHTML = `
+          <div class="result" style="color:red;">
+            ❌ Erro de conexão: ${error.message}
+          </div>
+        `;
+      }
+    }
+    
+    async function verificarServidor() {
+      const statusDiv = document.getElementById('serverStatus');
+      statusDiv.innerHTML = '<div class="result" style="color:yellow;">Verificando...</div>';
+      
+      try {
+        const response = await fetch('/api/produtos');
+        if (response.ok) {
+          statusDiv.innerHTML = '<div class="result" style="color:green;">✅ Servidor funcionando!</div>';
+        } else {
+          statusDiv.innerHTML = '<div class="result" style="color:red;">❌ Servidor com problema</div>';
+        }
+      } catch (error) {
+        statusDiv.innerHTML = `<div class="result" style="color:red;">❌ Erro: ${error.message}</div>`;
+      }
+    }
+    
+    // Verifica servidor ao carregar
+    verificarServidor();
+  </script>
+</body>
+</html> 

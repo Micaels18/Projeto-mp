@@ -4,6 +4,43 @@ const { MercadoPagoConfig, Preference } = require('mercadopago');
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+
+// Configuração do multer para upload de imagens
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(__dirname, 'public', 'imgs');
+    // Cria o diretório se não existir
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Gera um nome único para o arquivo
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, 'produto-' + uniqueSuffix + ext);
+  }
+});
+
+const fileFilter = function (req, file, cb) {
+  // Aceita apenas imagens
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Apenas arquivos de imagem são permitidos!'), false);
+  }
+};
+
+const upload = multer({ 
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB
+  }
+});
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -172,6 +209,46 @@ app.put('/api/admin/produto/:id', (req, res) => {
   produtos[idx] = { ...produtos[idx], ...produtoEditado, id };
   fs.writeFileSync(produtosPath, JSON.stringify(produtos, null, 2));
   res.json({ message: 'Produto atualizado com sucesso!' });
+});
+
+// Rota para upload de imagem
+app.post('/api/upload-imagem', upload.single('imagem'), (req, res) => {
+  console.log('Upload de imagem solicitado');
+  console.log('req.file:', req.file);
+  
+  if (!req.file) {
+    console.log('Erro: Nenhum arquivo enviado');
+    return res.status(400).json({ error: 'Nenhum arquivo enviado' });
+  }
+  
+  try {
+    // Retorna a URL relativa para uso no front-end
+    const url = '/imgs/' + req.file.filename;
+    console.log('URL retornada:', url);
+    
+    res.json({ url });
+  } catch (error) {
+    console.error('Erro no upload:', error);
+    res.status(500).json({ error: 'Erro interno no servidor: ' + error.message });
+  }
+});
+
+// Middleware para tratar erros do multer
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    console.error('Erro do Multer:', error);
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ error: 'Arquivo muito grande. Tamanho máximo: 5MB' });
+    }
+    return res.status(400).json({ error: 'Erro no upload: ' + error.message });
+  }
+  
+  if (error.message === 'Apenas arquivos de imagem são permitidos!') {
+    return res.status(400).json({ error: error.message });
+  }
+  
+  console.error('Erro não tratado:', error);
+  res.status(500).json({ error: 'Erro interno no servidor' });
 });
 
 // Só depois das rotas da API:

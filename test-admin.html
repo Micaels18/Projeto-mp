@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Admin</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #121212; color: #fff; }
+    .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+    .admin { background: #FFD700; color: #000; }
+    .user { background: #4CAF50; color: #fff; }
+    .none { background: #f44336; color: #fff; }
+    button { padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Teste de Status Admin</h1>
+  
+  <div id="status"></div>
+  
+  <div>
+    <button onclick="testarLoginAdmin()">Login como Admin</button>
+    <button onclick="testarLoginUsuario()">Login como Usuário</button>
+    <button onclick="logout()">Logout</button>
+    <button onclick="verificarStatus()">Verificar Status</button>
+  </div>
+  
+  <div>
+    <h3>LocalStorage atual:</h3>
+    <pre id="localStorage"></pre>
+  </div>
+
+  <script>
+    function verificarStatus() {
+      const isAdmin = localStorage.getItem('isAdmin') === 'true';
+      const usuario = localStorage.getItem('usuario');
+      const nome = localStorage.getItem('usuario_nome');
+      
+      const statusEl = document.getElementById('status');
+      const localStorageEl = document.getElementById('localStorage');
+      
+      if (isAdmin) {
+        statusEl.innerHTML = '<div class="status admin">✅ Status: ADMIN</div>';
+      } else if (usuario) {
+        statusEl.innerHTML = '<div class="status user">👤 Status: USUÁRIO</div>';
+      } else {
+        statusEl.innerHTML = '<div class="status none">❌ Status: NÃO LOGADO</div>';
+      }
+      
+      localStorageEl.textContent = JSON.stringify({
+        isAdmin: localStorage.getItem('isAdmin'),
+        usuario: localStorage.getItem('usuario'),
+        usuario_nome: localStorage.getItem('usuario_nome')
+      }, null, 2);
+    }
+    
+    function testarLoginAdmin() {
+      localStorage.setItem('isAdmin', 'true');
+      localStorage.setItem('usuario', 'admin@admin.com');
+      localStorage.setItem('usuario_nome', 'Administrador');
+      verificarStatus();
+    }
+    
+    function testarLoginUsuario() {
+      localStorage.removeItem('isAdmin');
+      localStorage.setItem('usuario', 'usuario@teste.com');
+      localStorage.setItem('usuario_nome', 'Usuário Teste');
+      verificarStatus();
+    }
+    
+    function logout() {
+      localStorage.removeItem('isAdmin');
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('usuario_nome');
+      verificarStatus();
+    }
+    
+    // Verifica status ao carregar
+    verificarStatus();
+  </script>
+</body>
+</html> 

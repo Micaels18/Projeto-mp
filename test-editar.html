@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Botão Editar</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #121212; color: #fff; }
+    .test-card { background: #222; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    button { padding: 8px 16px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    .editar { background: #FFD700; color: #000; }
+    .remover { background: #c00; color: #fff; }
+    .estoque { background: #FFD700; color: #000; }
+  </style>
+</head>
+<body>
+  <h1>Teste do Botão Editar</h1>
+  
+  <div>
+    <button onclick="testarEditarProduto()">Testar editarProduto(1)</button>
+    <button onclick="verificarStatus()">Verificar Status Admin</button>
+    <button onclick="simularAdmin()">Simular Login Admin</button>
+    <button onclick="limparAdmin()">Limpar Admin</button>
+  </div>
+  
+  <div class="test-card">
+    <h3>Produto de Teste (ID: 1)</h3>
+    <p>Nome: Produto Teste</p>
+    <p>Preço: R$ 99,90</p>
+    <p>Estoque: 10</p>
+    <button class="editar" onclick="editarProduto(1)">Editar</button>
+    <button class="remover" onclick="removerProduto(1)">Remover</button>
+    <button class="estoque" onclick="alterarEstoque(1)">Alterar Estoque</button>
+  </div>
+  
+  <div id="status"></div>
+  
+  <script>
+    // Simula as funções do script.js
+    window.isAdmin = localStorage.getItem('isAdmin') === 'true';
+    
+    function testarEditarProduto() {
+      console.log('Testando editarProduto...');
+      console.log('window.isAdmin:', window.isAdmin);
+      console.log('editarProduto function:', typeof window.editarProduto);
+      
+      if (typeof window.editarProduto === 'function') {
+        window.editarProduto(1);
+      } else {
+        alert('Função editarProduto não encontrada!');
+      }
+    }
+    
+    function verificarStatus() {
+      const status = document.getElementById('status');
+      status.innerHTML = `
+        <h3>Status:</h3>
+        <p>isAdmin: ${window.isAdmin}</p>
+        <p>editarProduto: ${typeof window.editarProduto}</p>
+        <p>removerProduto: ${typeof window.removerProduto}</p>
+        <p>alterarEstoque: ${typeof window.alterarEstoque}</p>
+      `;
+    }
+    
+    function simularAdmin() {
+      localStorage.setItem('isAdmin', 'true');
+      window.isAdmin = true;
+      verificarStatus();
+    }
+    
+    function limparAdmin() {
+      localStorage.removeItem('isAdmin');
+      window.isAdmin = false;
+      verificarStatus();
+    }
+    
+    // Funções de teste
+    window.editarProduto = function(id) {
+      alert(`Redirecionando para editar produto ID: ${id}`);
+      // window.location.href = `admin.html?edit=${id}`;
+    };
+    
+    window.removerProduto = function(id) {
+      alert(`Removendo produto ID: ${id}`);
+    };
+    
+    window.alterarEstoque = function(id) {
+      alert(`Alterando estoque do produto ID: ${id}`);
+    };
+    
+    // Verifica status ao carregar
+    verificarStatus();
+  </script>
+</body>
+</html> 

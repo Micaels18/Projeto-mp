@@ -1,6 +1,9 @@
 // js/script.js
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ======= DEFINIÇÃO DE ADMIN (DEVE VIR PRIMEIRO) =======
+  window.isAdmin = localStorage.getItem('isAdmin') === 'true';
+  
   // ======= LÓGICA DO CARRINHO =======
   let carrinho = [];
   let total = 0;
@@ -128,6 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ======= LISTAGEM AUTOMÁTICA DE PRODUTOS =======
   async function carregarProdutos() {
+    console.log('carregarProdutos chamada');
+    console.log('window.isAdmin:', window.isAdmin);
+    
     const grid = document.getElementById('grid-produtos');
     if (!grid) return;
     grid.innerHTML = '<p>Carregando produtos...</p>';
@@ -144,6 +150,13 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = 'card';
         card.setAttribute('data-categoria', produto.categoria || 'outros');
         card.setAttribute('data-id', produto.id);
+        
+        const adminButtons = window.isAdmin ? `<button onclick="editarProduto(${produto.id});event.stopPropagation();" style="background:#FFD700;color:#000;margin-top:6px;">Editar</button>
+          <button onclick="removerProduto(${produto.id});event.stopPropagation();" style="background:#c00;color:#fff;margin-top:6px;">Remover</button>
+          <button onclick="alterarEstoque(${produto.id});event.stopPropagation();" style="background:#FFD700;color:#000;margin-top:6px;">Alterar Estoque</button>` : '';
+        
+        console.log(`Produto ${produto.id}: adminButtons = ${adminButtons ? 'SIM' : 'NÃO'}`);
+        
         card.innerHTML = `
           <img src="${produto.imagem}" alt="${produto.nome}">
           <h3>${produto.nome}</h3>
@@ -151,9 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <span>R$ ${produto.preco ? produto.preco.toFixed(2) : '0,00'}</span>
           <div>Estoque: <span id="estoque-${produto.id}">${produto.estoque ?? 0}</span></div>
           <button onclick="adicionarAoCarrinho('${produto.nome}', ${produto.preco})">Adicionar</button>
-          ${window.isAdmin ? `<button onclick="editarProduto(${produto.id});event.stopPropagation();" style="background:#FFD700;color:#000;margin-top:6px;">Editar</button>
-          <button onclick="removerProduto(${produto.id});event.stopPropagation();" style="background:#c00;color:#fff;margin-top:6px;">Remover</button>
-          <button onclick="alterarEstoque(${produto.id});event.stopPropagation();" style="background:#FFD700;color:#000;margin-top:6px;">Alterar Estoque</button>` : ''}
+          ${adminButtons}
         `;
         card.onclick = function(e) {
           // Evita conflito do clique dos botões admin
@@ -189,6 +200,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  window.removerProduto = async function(id) {
+    if (!confirm('Tem certeza que deseja remover este produto?')) return;
+    try {
+      const res = await fetch('/api/admin/produto/' + id, { method: 'DELETE' });
+      if (res.ok) {
+        alert('Produto removido!');
+        // Recarrega a página para atualizar a lista
+        window.location.reload();
+      } else {
+        alert('Erro ao remover produto.');
+      }
+    } catch {
+      alert('Erro ao remover produto.');
+    }
+  };
+
   // Chama o carregamento dos produtos ao abrir a página de produtos ou index
   if (window.location.pathname.endsWith('produtos.html') || window.location.pathname.endsWith('index.html')) {
     carregarProdutos();
@@ -196,18 +223,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Renderiza o botão de cadastro de produto para admin na página de produtos
   function renderBotaoAdminProdutos() {
+    console.log('renderBotaoAdminProdutos chamada');
+    console.log('window.isAdmin:', window.isAdmin);
+    console.log('pathname:', window.location.pathname);
+    
     if (window.location.pathname.endsWith('produtos.html') && window.isAdmin) {
       const el = document.getElementById('admin-cadastrar-produto');
       if (el) {
-        el.innerHTML = `<button style='background:#FFD700;color:#181818;font-weight:bold;padding:12px 24px;border-radius:6px;margin:18px 0 18px 0;cursor:pointer;font-size:17px;border:none;' onclick=\"window.location.href='admin.html'\">Cadastrar Produto</button>`;
+        el.innerHTML = `<button style='background:#FFD700;color:#181818;font-weight:bold;padding:12px 24px;border-radius:6px;margin:18px 0 18px 0;cursor:pointer;font-size:17px;border:none;' onclick="window.location.href='admin.html'">Cadastrar Produto</button>`;
+        console.log('Botão admin renderizado');
+      } else {
+        console.log('Elemento admin-cadastrar-produto não encontrado');
       }
+    } else {
+      console.log('Não renderizando botão admin:', {
+        isProdutosPage: window.location.pathname.endsWith('produtos.html'),
+        isAdmin: window.isAdmin
+      });
     }
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderBotaoAdminProdutos);
-  } else {
-    renderBotaoAdminProdutos();
-  }
+  
+  // Chama a renderização do botão admin imediatamente
+  renderBotaoAdminProdutos();
 
   // Remover mensagem de nenhum produto cadastrado na index.html
   const grid = document.getElementById('grid-produtos');
@@ -220,11 +257,17 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(grid, { childList: true, subtree: true });
   }
 
-  window.isAdmin = localStorage.getItem('isAdmin') === 'true';
   window.logout = function() {
     localStorage.removeItem('isAdmin');
     localStorage.removeItem('usuario');
     localStorage.removeItem('usuario_nome');
     window.location.reload();
+  };
+
+  window.editarProduto = function(id) {
+    console.log('editarProduto chamada com ID:', id);
+    console.log('window.isAdmin:', window.isAdmin);
+    // Redireciona para admin.html já em modo edição
+    window.location.href = `admin.html?edit=${id}`;
   };
 });
