@@ -8,7 +8,7 @@ const app = express();
 const PORT = 3000;
 
 // Configure com seu access token de teste do Mercado Pago
-const client = new MercadoPagoConfig({ accessToken: 'TEST-1042952829030186-031210-9b55dfc5f3166d1feea367e37f906c72-582361881' });
+const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
 
 app.use(cors());
 app.use(express.json());
@@ -27,9 +27,9 @@ app.post('/api/create_preference', async (req, res) => {
       body: {
         items,
         back_urls: {
-          success: "http://localhost:3000/sucesso.html",
-          failure: "http://localhost:3000/erro.html",
-          pending: "http://localhost:3000/pendente.html"
+          success: "https://projeto-mp-production.up.railway.app/sucesso.html",
+          failure: "https://projeto-mp-production.up.railway.app/erro.html",
+          pending: "https://projeto-mp-production.up.railway.app/pendente.html"
         }
       }
     });
