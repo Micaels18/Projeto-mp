@@ -88,6 +88,11 @@
           msg.style.color = 'green';
           msg.textContent = data.message;
           localStorage.setItem('usuario', email);
+          if (email === 'admin@admin.com') {
+            localStorage.setItem('isAdmin', 'true');
+          } else {
+            localStorage.removeItem('isAdmin');
+          }
           setTimeout(() => {
             window.location.href = 'index.html';
           }, 1000);

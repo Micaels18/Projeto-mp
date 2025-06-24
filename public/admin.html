@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Admin - Produtos</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #121212; color: #fff; }
+    .admin-box {
+      max-width: 420px;
+      margin: 80px auto 0 auto;
+      background: #181818;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #0002;
+      padding: 32px 24px;
+      color: #fff;
+    }
+    .admin-box h1 { color: #FFD700; text-align: center; }
+    .admin-box input, .admin-box textarea, .admin-box button {
+      width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: none; font-size: 16px;
+    }
+    .admin-box input, .admin-box textarea {
+      background: #121212; color: #fff; border: 1px solid #333;
+    }
+    .admin-box input:focus, .admin-box textarea:focus { outline: 2px solid #FFD700; }
+    .admin-box button { background: #FFD700; color: #181818; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+    .admin-box button:hover { background: #e6c200; }
+    .msg { text-align: center; margin-top: 12px; }
+    .logout { margin-top: 18px; text-align: center; }
+    .logout button { background: #FFD700; color: #181818; }
+  </style>
+</head>
+<body>
+  <div class="admin-box" id="admin-box">
+    <h1>Admin - Produtos</h1>
+    <form id="form-login">
+      <input type="text" id="admin-user" placeholder="Usuário admin" required />
+      <input type="password" id="admin-pass" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <div class="msg" id="msg-login"></div>
+  </div>
+  <script>
+    // Simples autenticação local (pode ser melhorada depois)
+    const ADMIN_USER = 'admin';
+    const ADMIN_PASS = 'admin123';
+    function showCadastro() {
+      document.getElementById('admin-box').innerHTML = `
+        <h1>Cadastro de Produto</h1>
+        <form id="form-produto">
+          <input type="text" id="nome" placeholder="Nome do produto" required />
+          <input type="number" id="preco" placeholder="Preço (ex: 99.90)" step="0.01" required />
+          <input type="number" id="preco_avista" placeholder="Preço à vista (opcional)" step="0.01" />
+          <input type="text" id="marca" placeholder="Marca" required />
+          <textarea id="descricao" placeholder="Descrição curta" required></textarea>
+          <textarea id="descricao_longa" placeholder="Descrição longa" required></textarea>
+          <input type="text" id="imagem" placeholder="URL da imagem (ex: imgs/produto.jpg)" required />
+          <input type="text" id="sabores" placeholder="Sabores (separados por vírgula)" />
+          <input type="text" id="tamanhos" placeholder="Tamanhos (separados por vírgula)" />
+          <input type="number" id="estoque" placeholder="Estoque inicial" min="0" value="0" />
+          <button type="submit">Cadastrar Produto</button>
+        </form>
+        <div class="msg" id="msg-produto"></div>
+        <hr style='margin:24px 0;border:1px solid #FFD70022;'>
+        <h2 style='color:#FFD700;text-align:center;'>Produtos Cadastrados</h2>
+        <div id="lista-produtos"></div>
+        <div class="logout"><button onclick="logout()">Sair</button></div>
+      `;
+      document.getElementById('form-produto').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const editId = this.getAttribute('data-edit-id');
+        const produto = {
+          nome: document.getElementById('nome').value,
+          preco: parseFloat(document.getElementById('preco').value),
+          preco_avista: parseFloat(document.getElementById('preco_avista').value) || undefined,
+          marca: document.getElementById('marca').value,
+          descricao: document.getElementById('descricao').value,
+          descricao_longa: document.getElementById('descricao_longa').value,
+          imagem: document.getElementById('imagem').value,
+          sabores: document.getElementById('sabores').value.split(',').map(s=>s.trim()).filter(Boolean),
+          tamanhos: document.getElementById('tamanhos').value.split(',').map(t=>t.trim()).filter(Boolean),
+          estoque: parseInt(document.getElementById('estoque').value) || 0
+        };
+        const msg = document.getElementById('msg-produto');
+        try {
+          let res, data;
+          if (editId) {
+            // Edição
+            res = await fetch('/api/admin/produto/' + editId, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(produto)
+            });
+            data = await res.json();
+            if (res.ok) {
+              msg.style.color = 'green';
+              msg.textContent = 'Produto atualizado com sucesso!';
+              this.removeAttribute('data-edit-id');
+              this.reset();
+              carregarListaProdutos();
+            } else {
+              msg.style.color = 'red';
+              msg.textContent = data.error || 'Erro ao atualizar produto.';
+            }
+          } else {
+            // Cadastro
+            res = await fetch('/api/admin/produto', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(produto)
+            });
+            data = await res.json();
+            if (res.ok) {
+              msg.style.color = 'green';
+              msg.textContent = data.message;
+              this.reset();
+              carregarListaProdutos();
+            } else {
+              msg.style.color = 'red';
+              msg.textContent = data.error || 'Erro ao cadastrar produto.';
+            }
+          }
+        } catch (err) {
+          msg.style.color = 'red';
+          msg.textContent = 'Erro ao conectar ao servidor.';
+        }
+      });
+      carregarListaProdutos();
+    }
+    document.getElementById('form-login').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const user = document.getElementById('admin-user').value;
+      const pass = document.getElementById('admin-pass').value;
+      const msg = document.getElementById('msg-login');
+      if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        localStorage.setItem('isAdmin', 'true');
+        window.location.href = 'index.html';
+      } else {
+        msg.style.color = 'red';
+        msg.textContent = 'Usuário ou senha inválidos.';
+      }
+    });
+    function logout() {
+      localStorage.removeItem('isAdmin');
+      window.location.reload();
+    }
+    async function carregarListaProdutos() {
+      const lista = document.getElementById('lista-produtos');
+      if (!lista) return;
+      lista.innerHTML = '<p>Carregando...</p>';
+      try {
+        const res = await fetch('/api/produtos');
+        const produtos = await res.json();
+        if (!Array.isArray(produtos) || produtos.length === 0) {
+          lista.innerHTML = '<p>Nenhum produto cadastrado.</p>';
+          return;
+        }
+        lista.innerHTML = produtos.map(p => `
+          <div style='background:#222;padding:10px 8px;margin-bottom:10px;border-radius:6px;'>
+            <b>${p.nome}</b> <span style='color:#FFD700'>(ID: ${p.id})</span><br>
+            <img src='${p.imagem}' alt='' style='max-width:60px;max-height:60px;vertical-align:middle;margin:0 8px 0 0;'>
+            Preço: R$ ${p.preco?.toFixed(2) ?? '0,00'} | Estoque: <span id='estoque-admin-${p.id}'>${p.estoque ?? 0}</span><br>
+            <button onclick='editarProduto(${p.id})'>Editar</button>
+            <button onclick='removerProduto(${p.id})' style='background:#c00;color:#fff;'>Remover</button>
+            <button onclick='alterarEstoque(${p.id})' style='background:#FFD700;color:#000;'>Alterar Estoque</button>
+          </div>
+        `).join('');
+      } catch {
+        lista.innerHTML = '<p>Erro ao carregar produtos.</p>';
+      }
+    }
+    window.removerProduto = async function(id) {
+      if (!confirm('Tem certeza que deseja remover este produto?')) return;
+      try {
+        const res = await fetch('/api/admin/produto/' + id, { method: 'DELETE' });
+        if (res.ok) {
+          alert('Produto removido!');
+          carregarListaProdutos();
+        } else {
+          alert('Erro ao remover produto.');
+        }
+      } catch {
+        alert('Erro ao remover produto.');
+      }
+    }
+    window.editarProduto = async function(id) {
+      try {
+        const res = await fetch('/api/produtos');
+        const produtos = await res.json();
+        const p = produtos.find(prod => prod.id === id);
+        if (!p) return alert('Produto não encontrado!');
+        // Preenche o formulário com os dados do produto
+        document.getElementById('nome').value = p.nome;
+        document.getElementById('preco').value = p.preco;
+        document.getElementById('preco_avista').value = p.preco_avista || '';
+        document.getElementById('marca').value = p.marca;
+        document.getElementById('descricao').value = p.descricao;
+        document.getElementById('descricao_longa').value = p.descricao_longa;
+        document.getElementById('imagem').value = p.imagem;
+        document.getElementById('sabores').value = (p.sabores||[]).join(', ');
+        document.getElementById('tamanhos').value = (p.tamanhos||[]).join(', ');
+        document.getElementById('estoque').value = p.estoque ?? 0;
+        // Salva o id em um atributo do form
+        document.getElementById('form-produto').setAttribute('data-edit-id', id);
+        document.getElementById('msg-produto').textContent = 'Editando produto ID ' + id;
+      } catch {
+        alert('Erro ao buscar produto para edição.');
+      }
+    }
+  </script>
+</body>
+</html> 

@@ -41,90 +41,9 @@
       <option value="pre-treino">Pré-Treino</option>
     </select>
   </section>
-
-  <div class="grid-produtos">
-    <div class="card" data-categoria="whey">
-      <img src="imgs/whey-probiotica.png" alt="Whey Protein">
-      <h3>Whey Protein Probiótica</h3>
-      <p>Suplemento de proteína...</p>
-      <span>R$ 129,90</span>
-      <button onclick="adicionarAoCarrinho('Whey Protein', 129.90)">
-        Adicionar
-      </button>
-    </div>
-
-    <div class="card" data-categoria="creatina">
-      <img src="imgs/Creatina-mp.png" alt="Creatina">
-      <h3>Creatina Matéria Prima</h3>
-      <p>Mais força e resistência.</p>
-      <span>R$ 49,90</span>
-      <button onclick="adicionarAoCarrinho('Creatina', 49.90)">
-        Adicionar
-      </button>
-    </div>
-
-    <div class="card" data-categoria="pre-treino">
-      <img src="imgs/pancada.png" alt="pancada">
-      <h3>Pré treino Pancada</h3>
-      <p>Sabor Frutas Amarelas</p>
-      <span>R$ 79,90</span>
-      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
-    </div>
-    <div class="card" data-categoria="pre-treino">
-      <img src="imgs/pancada.png" alt="pancada">
-      <h3>Pré treino Pancada</h3>
-      <p>Sabor Frutas Amarelas</p>
-      <span>R$ 79,90</span>
-      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
-    </div>
-
-    <div class="card" data-categoria="pre-treino">
-      <img src="imgs/pancada.png" alt="pancada">
-      <h3>Pré treino Pancada</h3>
-      <p>Sabor Frutas Amarelas</p>
-      <span>R$ 79,90</span>
-      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
-    </div>
-
-    <div class="card" data-categoria="pre-treino">
-      <img src="imgs/pancada.png" alt="pancada">
-      <h3>Pré treino Pancada</h3>
-      <p>Sabor Frutas Amarelas</p>
-      <span>R$ 79,90</span>
-      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
-    </div>
-
-    <div class="card" data-categoria="pre-treino">
-      <img src="imgs/pancada.png" alt="pancada">
-      <h3>Pré treino Pancada</h3>
-      <p>Sabor Frutas Amarelas</p>
-      <span>R$ 79,90</span>
-      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
-    </div>
-
-    <div class="card" data-categoria="pre-treino">
-      <img src="imgs/pancada.png" alt="pancada">
-      <h3>Pré treino Pancada</h3>
-      <p>Sabor Frutas Amarelas</p>
-      <span>R$ 79,90</span>
-      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
-    </div>
-    <div class="card" data-categoria="pre-treino">
-      <img src="imgs/pancada.png" alt="pancada">
-      <h3>Pré treino Pancada</h3>
-      <p>Sabor Frutas Amarelas</p>
-      <span>R$ 79,90</span>
-      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
-    </div>
-    <div class="card" data-categoria="pre-treino">
-      <img src="imgs/pancada.png" alt="pancada">
-      <h3>Pré treino Pancada</h3>
-      <p>Sabor Frutas Amarelas</p>
-      <span>R$ 79,90</span>
-      <button onclick="adicionarAoCarrinho('pre-treino', 79.90)">Adicionar</button>
-    </div>
-
-    <!-- repita para cada produto -->
+  <div id="admin-cadastrar-produto"></div>
+  <div class="grid-produtos" id="grid-produtos">
+    <!-- Os cards de produtos serão inseridos aqui via JS -->
   </div>
 </main>
 
@@ -135,5 +54,17 @@
     </footer>
 
 <script src="js/script.js" defer></script>
+<script>
+  function renderBotaoAdmin() {
+    if (window.isAdmin) {
+      document.getElementById('admin-cadastrar-produto').innerHTML = `<button style='background:#FFD700;color:#181818;font-weight:bold;padding:12px 24px;border-radius:6px;margin:18px 0 18px 0;cursor:pointer;font-size:17px;border:none;' onclick=\"window.location.href='admin.html'\">Cadastrar Produto</button>`;
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderBotaoAdmin);
+  } else {
+    renderBotaoAdmin();
+  }
+</script>
 </body>
 </html>

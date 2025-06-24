@@ -305,6 +305,21 @@ footer {
   }
 }
 
+.produtos-destaque {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.produtos-destaque .card {
+  flex: 1 1 220px;
+  max-width: 260px;
+  min-width: 200px;
+}
+
 
 
 

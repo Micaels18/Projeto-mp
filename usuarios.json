@@ -9,5 +9,10 @@
     "senha": "$2b$10$1ByyK5ILjBrlQ1dJ/SQp/..XqFhK8MCB8loLqgwgeDZkmSa1ciY32",
     "endereco": "RUa luiz barreto, 530",
     "cep": "95840-000"
+  },
+  {
+    "nome": "Administrador",
+    "email": "admin@admin.com",
+    "senha": "$2b$10$.7OzUmqT2sqAVVYGRS/Jge9gDnMtJiRksSpynJ9QEIyPp/Mz4lpRq"
   }
 ]

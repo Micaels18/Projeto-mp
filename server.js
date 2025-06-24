@@ -96,6 +96,84 @@ app.get('/api/usuario_nome', (req, res) => {
   res.json({ nome: usuario.nome });
 });
 
+const produtosPath = path.join(__dirname, 'produtos.json');
+
+// Rota para cadastrar produto (admin)
+app.post('/api/admin/produto', (req, res) => {
+  const produto = req.body;
+  const produtosPath = path.join(__dirname, 'produtos.json');
+  let produtos = [];
+  if (fs.existsSync(produtosPath)) {
+    produtos = JSON.parse(fs.readFileSync(produtosPath, 'utf8'));
+  }
+  // Gera ID único
+  produto.id = produtos.length > 0 ? Math.max(...produtos.map(p => p.id || 0)) + 1 : 1;
+  produtos.push(produto);
+  fs.writeFileSync(produtosPath, JSON.stringify(produtos, null, 2));
+  res.status(201).json({ message: 'Produto cadastrado com sucesso!' });
+});
+
+// Rota para remover produto (admin)
+app.delete('/api/admin/produto/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const produtosPath = path.join(__dirname, 'produtos.json');
+  let produtos = [];
+  if (fs.existsSync(produtosPath)) {
+    produtos = JSON.parse(fs.readFileSync(produtosPath, 'utf8'));
+  }
+  const novoArray = produtos.filter(p => p.id !== id);
+  if (novoArray.length === produtos.length) {
+    return res.status(404).json({ error: 'Produto não encontrado' });
+  }
+  fs.writeFileSync(produtosPath, JSON.stringify(novoArray, null, 2));
+  res.json({ message: 'Produto removido com sucesso!' });
+});
+
+// Rota para listar todos os produtos
+app.get('/api/produtos', (req, res) => {
+  const produtosPath = path.join(__dirname, 'produtos.json');
+  let produtos = [];
+  if (fs.existsSync(produtosPath)) {
+    produtos = JSON.parse(fs.readFileSync(produtosPath, 'utf8'));
+  }
+  res.json(produtos);
+});
+
+// Rota para atualizar o estoque de um produto
+app.post('/api/produtos/estoque', (req, res) => {
+  const { id, novoEstoque } = req.body;
+  const produtosPath = path.join(__dirname, 'produtos.json');
+  let produtos = [];
+  if (fs.existsSync(produtosPath)) {
+    produtos = JSON.parse(fs.readFileSync(produtosPath, 'utf8'));
+  }
+  const idx = produtos.findIndex(p => p.id === id);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Produto não encontrado' });
+  }
+  produtos[idx].estoque = novoEstoque;
+  fs.writeFileSync(produtosPath, JSON.stringify(produtos, null, 2));
+  res.json({ message: 'Estoque atualizado com sucesso!' });
+});
+
+// Rota para editar produto (admin)
+app.put('/api/admin/produto/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const produtoEditado = req.body;
+  const produtosPath = path.join(__dirname, 'produtos.json');
+  let produtos = [];
+  if (fs.existsSync(produtosPath)) {
+    produtos = JSON.parse(fs.readFileSync(produtosPath, 'utf8'));
+  }
+  const idx = produtos.findIndex(p => p.id === id);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Produto não encontrado' });
+  }
+  produtos[idx] = { ...produtos[idx], ...produtoEditado, id };
+  fs.writeFileSync(produtosPath, JSON.stringify(produtos, null, 2));
+  res.json({ message: 'Produto atualizado com sucesso!' });
+});
+
 // Só depois das rotas da API:
 app.use(express.static('public'));
 

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalhes do Produto</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #121212; color: #fff; }
+    .produto-container {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 80px auto 0 auto;
+      background: #181818;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #0002;
+      padding: 32px 24px;
+      gap: 32px;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .produto-info {
+      flex: 1 1 380px;
+      min-width: 320px;
+      text-align: left;
+    }
+    .produto-imagem {
+      flex: 1 1 320px;
+      min-width: 300px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .produto-imagem img {
+      max-width: 340px;
+      max-height: 340px;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .produto-preco {
+      color: #FFD700;
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 16px 0 8px 0;
+    }
+    .produto-preco-parcela {
+      color: #FFD700bb;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .produto-btns {
+      margin: 18px 0 0 0;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .produto-btns button {
+      background: #FFD700;
+      color: #181818;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .produto-btns button:hover {
+      background: #e6c200;
+    }
+    .produto-btns .add {
+      background: #FFD700;
+      color: #222;
+    }
+    .produto-btns .add:hover {
+      background: #e6c200;
+    }
+    .produto-detalhes {
+      margin-top: 32px;
+      background: #222;
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .produto-detalhes h2 {
+      color: #FFD700;
+      margin-bottom: 10px;
+    }
+    .produto-relacionados {
+      max-width: 1100px;
+      margin: 40px auto 0 auto;
+    }
+    .relacionados-lista {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+    .relacionado-card {
+      background: #181818;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #0001;
+      padding: 12px;
+      width: 180px;
+      text-align: center;
+      cursor: pointer;
+      transition: box-shadow 0.2s, background 0.2s;
+      color: #fff;
+      border: 1px solid #FFD70022;
+    }
+    .relacionado-card:hover {
+      box-shadow: 0 4px 16px #FFD70044;
+      background: #222;
+    }
+    .relacionado-card img {
+      max-width: 100%;
+      height: 90px;
+      object-fit: contain;
+      margin-bottom: 8px;
+      background: #fff;
+      border-radius: 4px;
+    }
+    .relacionado-card .preco {
+      color: #FFD700;
+      font-size: 16px;
+    }
+    a { color: #FFD700; }
+    @media (max-width: 900px) {
+      .produto-container { flex-direction: column; align-items: center; }
+      .produto-imagem, .produto-info { min-width: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">Matéria Prima <span>Triunfo</span></div>
+      <nav>
+        <ul>
+          <li><a href="index.html#home">Início</a></li>
+          <li><a href="produtos.html">Produtos</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+      <div class="carrinho-icon" onclick="abrirCarrinho()">
+        Carrinho🛒 <span id="quantidade-carrinho">0</span>
+      </div>
+      <div id="usuario-logado" style="margin-left:20px;"></div>
+    </div>
+  </header>
+  <button class="btn-voltar" onclick="history.back()">&larr; Voltar</button>
+  <div class="produto-container" id="produto-container"></div>
+  <div class="produto-relacionados">
+    <h2 style="color:#FFD700;">Quem viu, viu também</h2>
+    <div class="relacionados-lista" id="relacionados-lista"></div>
+  </div>
+  <script src="js/script.js"></script>
+  <script>
+    async function buscarProduto(id) {
+      const res = await fetch('/api/produtos');
+      const produtos = await res.json();
+      return produtos.find(p => p.id == id);
+    }
+    async function renderProdutoPage() {
+      const params = new URLSearchParams(window.location.search);
+      const id = Number(params.get('id'));
+      const produto = await buscarProduto(id);
+      if (!produto) {
+        document.getElementById('produto-container').innerHTML = '<p>Produto não encontrado.</p>';
+        return;
+      }
+      document.getElementById('produto-container').innerHTML = `
+        <div class="produto-imagem">
+          <img src="${produto.imagem}" alt="${produto.nome}">
+        </div>
+        <div class="produto-info">
+          <h1 style="color:#FFD700;">${produto.nome}</h1>
+          <div style="color:#FFD700bb; font-size:15px; margin-bottom:8px;">Marca: <b>${produto.marca}</b></div>
+          <div class="produto-preco">R$ ${produto.preco?.toFixed(2) ?? '0,00'}</div>
+          <div class="produto-preco-parcela">6x R$ ${(produto.preco/6).toFixed(2)} sem juros<br>ou à vista por <b style='color:#FFD700'>R$ ${produto.preco_avista?.toFixed(2) ?? ''}</b></div>
+          <label for="sabor">Selecione o Sabor</label><br>
+          <select id="sabor" style="margin-bottom:10px;">
+            ${(produto.sabores||[]).map(s => `<option>${s}</option>`).join('')}
+          </select>
+          <br>
+          <label for="tamanho">Selecione o tamanho:</label><br>
+          ${(produto.tamanhos||[]).map(t => `<button style='margin:4px 4px 8px 0; padding:6px 16px; border-radius:5px; border:1px solid #FFD700; background:#181818; color:#FFD700;'>${t}</button>`).join('')}
+          <div class="produto-btns">
+            <button onclick="adicionarAoCarrinho('${produto.nome}', ${produto.preco})">ADICIONAR AO CARRINHO</button>
+            ${window.isAdmin ? `<button onclick="editarProduto(${produto.id})" style="background:#FFD700;color:#000;margin-left:10px;">Editar</button>\n            <button onclick="removerProduto(${produto.id})" style="background:#c00;color:#fff;margin-left:10px;">Remover</button>\n            <button onclick="alterarEstoque(${produto.id})" style="background:#FFD700;color:#000;margin-left:10px;">Alterar Estoque</button>` : ''}
+          </div>
+          <div style='margin-top:10px;'>Estoque: <span id="estoque-produto">${produto.estoque ?? 0}</span></div>
+          <div class="produto-detalhes">
+            <h2>Descrição longa</h2>
+            <div>${produto.descricao_longa || ''}</div>
+          </div>
+        </div>
+      `;
+      // Relacionados
+      const res = await fetch('/api/produtos');
+      const produtos = await res.json();
+      const relacionados = (produto.relacionados||[]).map(idr => produtos.find(p=>p.id==idr)).filter(Boolean);
+      document.getElementById('relacionados-lista').innerHTML = relacionados.map(r => `
+        <div class="relacionado-card" onclick="abrirProduto(${r.id})">
+          <img src="${r.imagem}" alt="${r.nome}">
+          <div style="font-weight:bold; font-size:15px; margin:6px 0;">${r.nome}</div>
+          <div class="preco">R$ ${r.preco?.toFixed(2) ?? '0,00'}</div>
+        </div>
+      `).join('');
+      // Botão de logout admin no topo
+      if (window.isAdmin) {
+        const el = document.getElementById('usuario-logado');
+        if (el) el.innerHTML = 'Admin <button onclick="logout()">Sair</button>';
+      }
+    }
+    renderProdutoPage();
+
+    // Exibe nome do usuário logado e botão de logout
+    document.addEventListener('DOMContentLoaded', async () => {
+      const usuarioEmail = localStorage.getItem('usuario');
+      const el = document.getElementById('usuario-logado');
+      if (usuarioEmail && el) {
+        // Tenta pegar o nome do usuário do localStorage
+        let nome = localStorage.getItem('usuario_nome');
+        if (!nome) {
+          // Busca o nome do usuário no backend
+          try {
+            const res = await fetch('/api/usuario_nome?email=' + encodeURIComponent(usuarioEmail));
+            if (res.ok) {
+              const data = await res.json();
+              nome = data.nome;
+              localStorage.setItem('usuario_nome', nome);
+            }
+          } catch {}
+        }
+        el.innerHTML = `Bem-vindo, <b>${nome || usuarioEmail}</b> <button onclick="logout()">Sair</button>`;
+      } else if (el) {
+        el.innerHTML = `<a href="login.html">Entrar</a> | <a href="cadastro.html">Cadastrar</a>`;
+      }
+    });
+    function logout() {
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('usuario_nome');
+      window.location.reload();
+    }
+  </script>
+</body>
+</html> 
