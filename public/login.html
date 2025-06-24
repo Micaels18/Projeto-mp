@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .form-box {
+      background: #1f1f1f;
+      border-radius: 10px;
+      padding: 32px 24px;
+      max-width: 400px;
+      margin: 100px auto 0 auto;
+      box-shadow: 0 2px 8px #0003;
+      color: #fff;
+    }
+    .form-box h1 {
+      text-align: center;
+      margin-bottom: 18px;
+      color: #FFD700;
+    }
+    .form-box input, .form-box button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+    .form-box input {
+      background: #121212;
+      color: #fff;
+      border: 1px solid #333;
+    }
+    .form-box input:focus {
+      outline: 2px solid #FFD700;
+    }
+    .form-box button {
+      background: #FFD700;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .form-box button:hover {
+      background: #e6c200;
+    }
+    .form-box .msg {
+      text-align: center;
+      margin-top: 12px;
+    }
+    .form-box p {
+      text-align: center;
+      margin-top: 16px;
+    }
+    body {
+      min-height: 100vh;
+      background: #121212;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h1>Login</h1>
+    <form id="form-login">
+      <input type="email" id="email" placeholder="E-mail" required />
+      <input type="password" id="senha" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <div class="msg" id="msg"></div>
+    <p>Não tem conta? <a href="cadastro.html" style="color:#FFD700;">Cadastre-se</a></p>
+  </div>
+  <script>
+    document.getElementById('form-login').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      const msg = document.getElementById('msg');
+      msg.textContent = '';
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, senha })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.style.color = 'green';
+          msg.textContent = data.message;
+          localStorage.setItem('usuario', email);
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1000);
+        } else {
+          msg.style.color = 'red';
+          msg.textContent = data.error || 'Erro ao fazer login.';
+        }
+      } catch (err) {
+        msg.style.color = 'red';
+        msg.textContent = 'Erro ao conectar ao servidor.';
+      }
+    });
+  </script>
+</body>
+</html> 

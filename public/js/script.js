@@ -5,9 +5,26 @@ document.addEventListener('DOMContentLoaded', () => {
   let carrinho = [];
   let total = 0;
 
+  // Carrega carrinho do localStorage, se existir
+  if (localStorage.getItem('carrinho')) {
+    try {
+      carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      total = parseFloat(localStorage.getItem('carrinho_total')) || 0;
+    } catch {
+      carrinho = [];
+      total = 0;
+    }
+  }
+
+  function salvarCarrinho() {
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    localStorage.setItem('carrinho_total', total.toString());
+  }
+
   window.adicionarAoCarrinho = (produto, preco) => {
     carrinho.push({ produto, preco });
     total += preco;
+    salvarCarrinho();
     atualizarCarrinho();
   };
 
@@ -34,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.removerItem = i => {
     total -= carrinho[i].preco;
     carrinho.splice(i, 1);
+    salvarCarrinho();
     atualizarCarrinho();
   };
 
@@ -100,4 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       filtrarCategoria(sel.value);
     });
   }
+
+  // Atualiza carrinho ao carregar a página
+  atualizarCarrinho();
 });

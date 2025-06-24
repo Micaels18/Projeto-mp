@@ -222,6 +222,89 @@ footer {
     border-top: 3px solid #FFD700;
 }
 
+/* Responsividade */
+@media (max-width: 1024px) {
+  .produtos .container {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  header .container {
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+  }
+  header {
+    height: auto;
+    padding: 10px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .produtos .container {
+    grid-template-columns: 1fr 1fr;
+  }
+  .banner {
+    height: 220px;
+  }
+  nav ul {
+    gap: 10px;
+    font-size: 15px;
+  }
+  .logo {
+    font-size: 20px;
+  }
+  .carrinho {
+    width: 90vw;
+    top: 60px;
+    right: -100vw;
+    height: calc(100% - 60px);
+  }
+  .carrinho.aberto {
+    right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 98%;
+    padding: 0 2%;
+  }
+  .produtos .container {
+    grid-template-columns: 1fr;
+  }
+  .banner {
+    height: 120px;
+  }
+  .logo {
+    font-size: 16px;
+  }
+  nav ul {
+    flex-direction: column;
+    gap: 5px;
+    font-size: 13px;
+  }
+  .categorias button {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .card img {
+    height: 120px;
+  }
+  .carrinho {
+    width: 100vw;
+    right: -100vw;
+    top: 50px;
+    height: calc(100% - 50px);
+    padding: 10px;
+  }
+  .carrinho h2 {
+    font-size: 18px;
+  }
+  .form-box {
+    max-width: 98vw;
+    padding: 16px 4px;
+  }
+}
+
 
 
 
