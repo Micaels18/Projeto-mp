@@ -1,16 +1,44 @@
 const mp = new MercadoPago('APP_USR-51377fc6-7726-40cc-870a-81197141baf6');
 
+const stylePadrao = {
+  base: {
+    color: "#181818",
+    fontSize: "1rem",
+    backgroundColor: "#fff",
+    borderRadius: "5px",
+    border: "none",
+    padding: "10px",
+    fontFamily: "Raleway, Arial, sans-serif",
+    '::placeholder': {
+      color: "#888"
+    }
+  },
+  focus: {
+    color: "#181818",
+    backgroundColor: "#f7f7f7"
+  },
+  empty: {
+    color: "#888"
+  },
+  invalid: {
+    color: "#c0392b"
+  }
+};
+
 // Monta os campos do Mercado Pago
 mp.fields.create('cardNumber', {
   placeholder: 'Número do cartão',
+  style: stylePadrao
 }).mount('form-checkout__cardNumber');
 
 mp.fields.create('expirationDate', {
   placeholder: 'MM/AA',
+  style: stylePadrao
 }).mount('form-checkout__expirationDate');
 
 mp.fields.create('securityCode', {
   placeholder: 'CVV',
+  style: stylePadrao
 }).mount('form-checkout__securityCode');
 
 // Exibe resumo do carrinho
