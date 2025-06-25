@@ -260,9 +260,17 @@ app.post('/api/pagar', async (req, res) => {
       })
     });
     const payment = await response.json();
+    if (!response.ok) {
+      // Repasse todos os detalhes do erro para o frontend
+      return res.status(response.status).json({
+        error: payment.error || payment.message || 'Erro desconhecido',
+        cause: payment.cause || null,
+        status: payment.status || response.status
+      });
+    }
     res.json(payment);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message || 'Erro inesperado no servidor.' });
   }
 });
 
