@@ -69,7 +69,8 @@ form.onsubmit = async function(e) {
   e.preventDefault();
   try {
     const token = await mp.fields.createCardToken();
-    const email = document.getElementById('form-checkout__email').value;
+    // Pega o e-mail do usuário logado do localStorage
+    const email = localStorage.getItem('usuario');
     const identificationNumber = document.getElementById('form-checkout__identificationNumber').value;
     let valor = parseFloat(localStorage.getItem('checkout_total'));
     if (!valor || isNaN(valor)) valor = 100;
