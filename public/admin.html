@@ -57,6 +57,26 @@
         }, 400);
       }
     }
+    // Controle de modo do formulário
+    let modoEdicao = false;
+    let idEditando = null;
+
+    function resetarFormulario() {
+      modoEdicao = false;
+      idEditando = null;
+      document.getElementById('titulo-form').textContent = 'Cadastro de Produto';
+      document.getElementById('btn-form').textContent = 'Cadastrar Produto';
+      document.getElementById('btn-cancelar').style.display = 'none';
+      document.getElementById('form-produto').reset();
+      document.getElementById('imagem').value = '';
+      document.getElementById('preview-imagem').style.display = 'none';
+      document.getElementById('imagem-atual').style.display = 'none';
+      const inputUpload = document.getElementById('imagem_upload');
+      if (inputUpload) inputUpload.setAttribute('required', 'required');
+    }
+
+    document.getElementById('btn-cancelar').onclick = resetarFormulario;
+
     function showCadastro() {
       document.getElementById('admin-box').innerHTML = `
         <h1>Cadastro de Produto</h1>
@@ -68,14 +88,18 @@
           <textarea id="descricao" placeholder="Descrição curta" required></textarea>
           <textarea id="descricao_longa" placeholder="Descrição longa" required></textarea>
           <label for="imagem_upload" style="display:block;margin:8px 0 4px 0;color:#FFD700;">Imagem do Produto *</label>
-          <input type="file" id="imagem_upload" accept="image/*" style="background:#fff;color:#000;" required />
-          <small style="color:#999;font-size:12px;">Selecione uma imagem para o produto (obrigatório)</small>
-          <img id="preview-imagem" src="" style="max-width:120px;max-height:120px;display:none;margin:8px 0;" />
+          <input type="file" id="imagem_upload" accept="image/*" style="background:#fff;color:#000;" />
+          <small style="color:#999;font-size:12px;">Selecione uma imagem para o produto (obrigatório no cadastro, opcional na edição)</small>
+          <div style="margin:8px 0;">
+            <img id="preview-imagem" src="" style="max-width:120px;max-height:120px;display:none;margin:8px 0;" />
+            <img id="imagem-atual" src="" style="max-width:120px;max-height:120px;display:none;margin:8px 0;" />
+          </div>
           <input type="hidden" id="imagem" />
           <input type="text" id="sabores" placeholder="Sabores (separados por vírgula)" />
           <input type="text" id="tamanhos" placeholder="Tamanhos (separados por vírgula)" />
           <input type="number" id="estoque" placeholder="Estoque inicial" min="0" value="0" />
-          <button type="submit">Cadastrar Produto</button>
+          <button type="submit" id="btn-form">Cadastrar Produto</button>
+          <button type="button" id="btn-cancelar" style="display:none;margin-top:8px;">Cancelar Edição</button>
         </form>
         <div class="msg" id="msg-produto"></div>
         <hr style='margin:24px 0;border:1px solid #FFD70022;'>
@@ -236,7 +260,11 @@
         const produtos = await res.json();
         const p = produtos.find(prod => prod.id === id);
         if (!p) return alert('Produto não encontrado!');
-        // Preenche o formulário com os dados do produto
+        modoEdicao = true;
+        idEditando = id;
+        document.getElementById('titulo-form').textContent = 'Editar Produto';
+        document.getElementById('btn-form').textContent = 'Salvar Alterações';
+        document.getElementById('btn-cancelar').style.display = 'inline-block';
         document.getElementById('nome').value = p.nome;
         document.getElementById('preco').value = p.preco;
         document.getElementById('preco_avista').value = p.preco_avista || '';
@@ -247,20 +275,17 @@
         document.getElementById('sabores').value = (p.sabores||[]).join(', ');
         document.getElementById('tamanhos').value = (p.tamanhos||[]).join(', ');
         document.getElementById('estoque').value = p.estoque ?? 0;
-        
-        // Mostra a imagem atual se existir
+        // Mostra a imagem atual
         if (p.imagem) {
           const preview = document.getElementById('preview-imagem');
           preview.src = p.imagem;
           preview.style.display = 'block';
+        } else {
+          preview.style.display = 'none';
         }
-        
-        // Remove o required do upload durante edição (opcional)
+        // Remove o required do upload durante edição
         const inputUpload = document.getElementById('imagem_upload');
-        if (inputUpload) {
-          inputUpload.removeAttribute('required');
-        }
-        
+        if (inputUpload) inputUpload.removeAttribute('required');
         // Salva o id em um atributo do form
         document.getElementById('form-produto').setAttribute('data-edit-id', id);
         document.getElementById('msg-produto').textContent = 'Editando produto ID ' + id;
@@ -293,6 +318,7 @@
     const inputUpload = document.getElementById('imagem_upload');
     const inputUrl = document.getElementById('imagem');
     const preview = document.getElementById('preview-imagem');
+    const imgAtual = document.getElementById('imagem-atual');
     if (inputUpload) {
       inputUpload.addEventListener('change', async function(e) {
         const file = e.target.files[0];
