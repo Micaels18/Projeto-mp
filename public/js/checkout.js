@@ -1,36 +1,58 @@
 const mp = new MercadoPago('APP_USR-51377fc6-7726-40cc-870a-81197141baf6');
 
-document.getElementById('form-pagamento').onsubmit = async function(e) {
-  e.preventDefault();
-  const cardNumber = document.getElementById('cardNumber').value;
-  const cardExpiration = document.getElementById('cardExpiration').value;
-  const cardCvv = document.getElementById('cardCvv').value;
-  const cardholderName = document.getElementById('cardholderName').value;
-  const email = document.getElementById('email').value;
+// Monta os campos do Mercado Pago
+mp.fields.create('cardNumber', {
+  placeholder: 'Número do cartão',
+}).mount('form-checkout__cardNumber');
 
-  // Tokenização
-  const [expMonth, expYear] = cardExpiration.split('/');
+mp.fields.create('expirationDate', {
+  placeholder: 'MM/AA',
+}).mount('form-checkout__expirationDate');
 
+mp.fields.create('securityCode', {
+  placeholder: 'CVV',
+}).mount('form-checkout__securityCode');
+
+// Exibe resumo do carrinho
+function exibirResumoCarrinho() {
+  const resumoDiv = document.getElementById('resumo-carrinho');
+  let carrinho = [];
+  let total = 0;
   try {
-    const tokenResponse = await mp.fields.createCardToken({
-      cardNumber,
-      cardholderName,
-      cardExpirationMonth: expMonth,
-      cardExpirationYear: '20' + expYear,
-      securityCode: cardCvv,
-      identificationType: 'CPF',
-      identificationNumber: '12345678909' // Exemplo, ideal pedir no form
-    });
-    const token = tokenResponse.id;
+    carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    total = parseFloat(localStorage.getItem('checkout_total')) || 0;
+  } catch {
+    carrinho = [];
+    total = 0;
+  }
+  let html = '<h2>Resumo do Carrinho</h2><ul>';
+  carrinho.forEach(item => {
+    html += `<li>${item.produto} — R$ ${item.preco.toFixed(2)}</li>`;
+  });
+  html += '</ul>';
+  html += `<div class='total'>Total: R$ ${total.toFixed(2)}</div>`;
+  resumoDiv.innerHTML = html;
+}
+exibirResumoCarrinho();
 
-    // Envia para o backend
+// Submissão do formulário
+const form = document.getElementById('form-pagamento');
+form.onsubmit = async function(e) {
+  e.preventDefault();
+  try {
+    const token = await mp.fields.createCardToken();
+    const email = document.getElementById('form-checkout__email').value;
+    const identificationNumber = document.getElementById('form-checkout__identificationNumber').value;
+    let valor = parseFloat(localStorage.getItem('checkout_total'));
+    if (!valor || isNaN(valor)) valor = 100;
     const res = await fetch('/api/pagar', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        token,
+        token: token.id,
         email,
-        valor: 100 // valor em reais, ajuste conforme seu carrinho
+        valor,
+        identificationNumber
       })
     });
     const data = await res.json();

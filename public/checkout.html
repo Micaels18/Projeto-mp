@@ -8,21 +8,33 @@
   <style>
     body { background: #121212; color: #fff; }
     .checkout-box { max-width: 400px; margin: 80px auto; background: #181818; border-radius: 10px; box-shadow: 0 2px 8px #0002; padding: 32px 24px; }
-    input, button { width: 100%; margin-bottom: 12px; padding: 10px; border-radius: 5px; border: none; font-size: 1rem; }
+    input, button, .mp-field { width: 100%; margin-bottom: 12px; padding: 10px; border-radius: 5px; border: none; font-size: 1rem; }
     button { background: #FFD700; color: #181818; font-weight: bold; cursor: pointer; transition: background 0.2s; }
     button:hover { background: #e6c200; }
     #resultado { margin-top: 18px; font-size: 0.97rem; word-break: break-all; }
+    .btn-voltar { background: #FFD700; color: #181818; font-weight: bold; border: none; border-radius: 6px; padding: 8px 22px; margin-bottom: 18px; cursor: pointer; transition: background 0.2s; box-shadow: 0 1px 4px #0002; width: 100%; }
+    .btn-voltar:hover { background: #e6c200; color: #000; }
+    .resumo-carrinho { background: #222; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
+    .resumo-carrinho h2 { color: #FFD700; font-size: 1.2rem; margin-bottom: 8px; }
+    .resumo-carrinho ul { list-style: none; padding: 0; margin: 0 0 8px 0; }
+    .resumo-carrinho li { font-size: 1rem; margin-bottom: 4px; }
+    .resumo-carrinho .total { font-weight: bold; color: #FFD700; font-size: 1.1rem; }
   </style>
 </head>
 <body>
   <div class="checkout-box">
+    <button class="btn-voltar" onclick="window.history.back()">&larr; Voltar para a página anterior</button>
+    <div class="resumo-carrinho" id="resumo-carrinho">
+      <!-- Resumo do carrinho será preenchido pelo JS -->
+    </div>
     <h1>Pagamento com Cartão</h1>
     <form id="form-pagamento">
-      <input type="text" id="cardNumber" placeholder="Número do cartão" required><br>
-      <input type="text" id="cardExpiration" placeholder="MM/AA" required><br>
-      <input type="text" id="cardCvv" placeholder="CVV" required><br>
-      <input type="text" id="cardholderName" placeholder="Nome impresso no cartão" required><br>
-      <input type="email" id="email" placeholder="E-mail do comprador" required><br>
+      <div id="form-checkout__cardNumber"></div>
+      <div id="form-checkout__expirationDate"></div>
+      <div id="form-checkout__securityCode"></div>
+      <input type="text" id="form-checkout__cardholderName" placeholder="Nome impresso no cartão" required>
+      <input type="email" id="form-checkout__email" placeholder="E-mail do comprador" required>
+      <input type="text" id="form-checkout__identificationNumber" placeholder="CPF" required>
       <button type="submit">Pagar</button>
     </form>
     <div id="resultado"></div>

@@ -74,28 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Seu carrinho está vazio.');
         return;
       }
-
-      // Monta o payload para o Mercado Pago
-      const items = carrinho.map(item => ({
-        title:      item.produto,
-        unit_price: item.preco,
-        quantity:   1
-      }));
-
-      try {
-        // Remove API_BASE e use rota relativa
-        const res = await fetch('/api/create_preference', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ items })
-        });
-        if (!res.ok) throw new Error(`Status ${res.status}`);
-        const { init_point } = await res.json();
-        window.location.href = init_point;
-      } catch (err) {
-        console.error('Erro ao iniciar pagamento:', err);
-        alert('Não foi possível iniciar o pagamento. Tente novamente.');
-      }
+      // Salva o valor total do carrinho no localStorage
+      localStorage.setItem('checkout_total', total.toString());
+      // Redireciona para o checkout transparente
+      window.location.href = 'checkout.html';
     });
   }
 

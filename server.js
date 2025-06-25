@@ -236,7 +236,7 @@ app.post('/api/upload-imagem', upload.single('imagem'), (req, res) => {
 
 // ROTA DE PAGAMENTO TRANSPARENTE (Checkout Custom)
 app.post('/api/pagar', async (req, res) => {
-  const { token, email, valor } = req.body;
+  const { token, email, valor, identificationNumber } = req.body;
   try {
     const response = await fetch('https://api.mercadopago.com/v1/payments', {
       method: 'POST',
@@ -250,7 +250,13 @@ app.post('/api/pagar', async (req, res) => {
         description: 'Compra na Matéria Prima Triunfo',
         installments: 1,
         payment_method_id: 'visa', // ou detecte dinamicamente
-        payer: { email }
+        payer: {
+          email,
+          identification: {
+            type: 'CPF',
+            number: identificationNumber
+          }
+        }
       })
     });
     const payment = await response.json();
