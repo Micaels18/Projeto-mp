@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
+const fetch = require('node-fetch');
 
 // Configuração do multer para upload de imagens
 const storage = multer.diskStorage({
@@ -230,6 +231,32 @@ app.post('/api/upload-imagem', upload.single('imagem'), (req, res) => {
   } catch (error) {
     console.error('Erro no upload:', error);
     res.status(500).json({ error: 'Erro interno no servidor: ' + error.message });
+  }
+});
+
+// ROTA DE PAGAMENTO TRANSPARENTE (Checkout Custom)
+app.post('/api/pagar', async (req, res) => {
+  const { token, email, valor } = req.body;
+  try {
+    const response = await fetch('https://api.mercadopago.com/v1/payments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.MP_ACCESS_TOKEN}`
+      },
+      body: JSON.stringify({
+        transaction_amount: valor,
+        token,
+        description: 'Compra na Matéria Prima Triunfo',
+        installments: 1,
+        payment_method_id: 'visa', // ou detecte dinamicamente
+        payer: { email }
+      })
+    });
+    const payment = await response.json();
+    res.json(payment);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout Transparente</title>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #121212; color: #fff; }
+    .checkout-box { max-width: 400px; margin: 80px auto; background: #181818; border-radius: 10px; box-shadow: 0 2px 8px #0002; padding: 32px 24px; }
+    input, button { width: 100%; margin-bottom: 12px; padding: 10px; border-radius: 5px; border: none; font-size: 1rem; }
+    button { background: #FFD700; color: #181818; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    button:hover { background: #e6c200; }
+    #resultado { margin-top: 18px; font-size: 0.97rem; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="checkout-box">
+    <h1>Pagamento com Cartão</h1>
+    <form id="form-pagamento">
+      <input type="text" id="cardNumber" placeholder="Número do cartão" required><br>
+      <input type="text" id="cardExpiration" placeholder="MM/AA" required><br>
+      <input type="text" id="cardCvv" placeholder="CVV" required><br>
+      <input type="text" id="cardholderName" placeholder="Nome impresso no cartão" required><br>
+      <input type="email" id="email" placeholder="E-mail do comprador" required><br>
+      <button type="submit">Pagar</button>
+    </form>
+    <div id="resultado"></div>
+  </div>
+  <script src="js/checkout.js"></script>
+</body>
+</html> 
