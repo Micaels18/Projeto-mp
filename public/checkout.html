@@ -64,6 +64,19 @@
     .campos-cartao-mp > div {
       margin-bottom: 0;
     }
+    .campo-mp {
+      background: #fff;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 4px #0001;
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+    }
+    .campo-mp > div {
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -75,9 +88,9 @@
     <h1>Pagamento com Cartão</h1>
     <form id="form-pagamento">
       <div class="campos-cartao-mp">
-        <div id="form-checkout__cardNumber"></div>
-        <div id="form-checkout__expirationDate"></div>
-        <div id="form-checkout__securityCode"></div>
+        <div class="campo-mp"><div id="form-checkout__cardNumber"></div></div>
+        <div class="campo-mp"><div id="form-checkout__expirationDate"></div></div>
+        <div class="campo-mp"><div id="form-checkout__securityCode"></div></div>
       </div>
       <input type="text" id="form-checkout__cardholderName" placeholder="Nome impresso no cartão" required>
       <input type="text" id="form-checkout__identificationNumber" placeholder="CPF" required>

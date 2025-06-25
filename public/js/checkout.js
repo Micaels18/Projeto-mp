@@ -71,7 +71,15 @@ form.onsubmit = async function(e) {
     const token = await mp.fields.createCardToken();
     // Pega o e-mail do usuário logado do localStorage
     const email = localStorage.getItem('usuario');
+    if (!email) {
+      document.getElementById('resultado').innerText = 'Você precisa estar logado para pagar!';
+      return;
+    }
     const identificationNumber = document.getElementById('form-checkout__identificationNumber').value;
+    if (!identificationNumber) {
+      document.getElementById('resultado').innerText = 'Preencha o CPF!';
+      return;
+    }
     let valor = parseFloat(localStorage.getItem('checkout_total'));
     if (!valor || isNaN(valor)) valor = 100;
     const res = await fetch('/api/pagar', {
@@ -85,8 +93,12 @@ form.onsubmit = async function(e) {
       })
     });
     const data = await res.json();
+    if (!res.ok) {
+      document.getElementById('resultado').innerText = 'Erro: ' + (data.message || JSON.stringify(data));
+      return;
+    }
     document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
   } catch (err) {
-    document.getElementById('resultado').innerText = 'Erro: ' + err.message;
+    document.getElementById('resultado').innerText = 'Erro inesperado: ' + err.message;
   }
 }; 
