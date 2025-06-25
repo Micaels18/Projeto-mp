@@ -73,13 +73,15 @@
       document.getElementById('imagem-atual').style.display = 'none';
       const inputUpload = document.getElementById('imagem_upload');
       if (inputUpload) inputUpload.setAttribute('required', 'required');
+      btnForm.disabled = false;
+      statusUpload.textContent = '';
     }
 
     document.getElementById('btn-cancelar').onclick = resetarFormulario;
 
     function showCadastro() {
       document.getElementById('admin-box').innerHTML = `
-        <h1>Cadastro de Produto</h1>
+        <h1 id="titulo-form">Cadastro de Produto</h1>
         <form id="form-produto">
           <input type="text" id="nome" placeholder="Nome do produto" required />
           <input type="number" id="preco" placeholder="Preço (ex: 99.90)" step="0.01" required />
@@ -107,19 +109,134 @@
         <div id="lista-produtos"></div>
         <div class="logout"><button onclick="logout()">Sair</button></div>
       `;
+
+      // Controle de modo do formulário
+      let modoEdicao = false;
+      let idEditando = null;
+      const btnForm = document.getElementById('btn-form');
+      const statusUpload = document.createElement('div');
+      statusUpload.id = 'status-upload';
+      statusUpload.style.color = '#FFD700';
+      statusUpload.style.fontSize = '13px';
+      statusUpload.style.margin = '6px 0';
+      btnForm.parentNode.insertBefore(statusUpload, btnForm);
+
+      function resetarFormulario() {
+        modoEdicao = false;
+        idEditando = null;
+        document.getElementById('titulo-form').textContent = 'Cadastro de Produto';
+        document.getElementById('btn-form').textContent = 'Cadastrar Produto';
+        document.getElementById('btn-cancelar').style.display = 'none';
+        document.getElementById('form-produto').reset();
+        document.getElementById('imagem').value = '';
+        document.getElementById('preview-imagem').style.display = 'none';
+        document.getElementById('imagem-atual').style.display = 'none';
+        const inputUpload = document.getElementById('imagem_upload');
+        if (inputUpload) inputUpload.setAttribute('required', 'required');
+        btnForm.disabled = false;
+        statusUpload.textContent = '';
+      }
+      document.getElementById('btn-cancelar').onclick = resetarFormulario;
+
+      // Preview da imagem ao selecionar arquivo e upload real
+      const inputUpload = document.getElementById('imagem_upload');
+      const inputUrl = document.getElementById('imagem');
+      const preview = document.getElementById('preview-imagem');
+      const imgAtual = document.getElementById('imagem-atual');
+      if (inputUpload) {
+        inputUpload.addEventListener('change', async function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            btnForm.disabled = true;
+            statusUpload.textContent = 'Enviando imagem...';
+            // Preview local
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+              preview.src = ev.target.result;
+              preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+
+            // Upload real
+            const formData = new FormData();
+            formData.append('imagem', file);
+            try {
+              const res = await fetch('/api/upload-imagem', {
+                method: 'POST',
+                body: formData
+              });
+              const data = await res.json();
+              if (res.ok && data.url) {
+                inputUrl.value = data.url;
+                btnForm.disabled = false;
+                statusUpload.textContent = 'Imagem enviada com sucesso!';
+                setTimeout(() => { statusUpload.textContent = ''; }, 1500);
+                console.log('Imagem enviada com sucesso:', data.url);
+              } else {
+                inputUrl.value = '';
+                btnForm.disabled = false;
+                statusUpload.textContent = '';
+                alert('Erro ao fazer upload da imagem: ' + (data.error || 'Erro desconhecido'));
+              }
+            } catch (err) {
+              inputUrl.value = '';
+              btnForm.disabled = false;
+              statusUpload.textContent = '';
+              alert('Erro ao fazer upload da imagem!');
+            }
+          }
+        });
+      }
+
+      // Função para preencher o formulário para edição
+      window.preencherFormularioEdicao = async function(id) {
+        try {
+          const res = await fetch('/api/produtos');
+          const produtos = await res.json();
+          const p = produtos.find(prod => prod.id === id);
+          if (!p) return alert('Produto não encontrado!');
+          modoEdicao = true;
+          idEditando = id;
+          document.getElementById('titulo-form').textContent = 'Editar Produto';
+          document.getElementById('btn-form').textContent = 'Salvar Alterações';
+          document.getElementById('btn-cancelar').style.display = 'inline-block';
+          document.getElementById('nome').value = p.nome;
+          document.getElementById('preco').value = p.preco;
+          document.getElementById('preco_avista').value = p.preco_avista || '';
+          document.getElementById('marca').value = p.marca;
+          document.getElementById('descricao').value = p.descricao;
+          document.getElementById('descricao_longa').value = p.descricao_longa;
+          document.getElementById('imagem').value = p.imagem;
+          document.getElementById('sabores').value = (p.sabores||[]).join(', ');
+          document.getElementById('tamanhos').value = (p.tamanhos||[]).join(', ');
+          document.getElementById('estoque').value = p.estoque ?? 0;
+          // Mostra a imagem atual
+          if (p.imagem) {
+            imgAtual.src = p.imagem;
+            imgAtual.style.display = 'block';
+          } else {
+            imgAtual.style.display = 'none';
+          }
+          preview.style.display = 'none';
+          // Remove o required do upload durante edição
+          if (inputUpload) inputUpload.removeAttribute('required');
+          // Salva o id em um atributo do form
+          document.getElementById('form-produto').setAttribute('data-edit-id', id);
+          document.getElementById('msg-produto').textContent = 'Editando produto ID ' + id;
+        } catch {
+          alert('Erro ao buscar produto para edição.');
+        }
+      }
+
+      // Atualizar o submit do formulário para alternar entre cadastro e edição
       document.getElementById('form-produto').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
-        // Validação da imagem
-        const inputUrl = document.getElementById('imagem');
         const editId = this.getAttribute('data-edit-id');
-        
-        // Se não está editando, a imagem é obrigatória
+        // Validação da imagem
         if (!editId && !inputUrl.value) {
           alert('Por favor, selecione uma imagem para o produto.');
           return;
         }
-        
         const produto = {
           nome: document.getElementById('nome').value,
           preco: parseFloat(document.getElementById('preco').value),
@@ -147,16 +264,7 @@
               msg.style.color = 'green';
               msg.textContent = 'Produto atualizado com sucesso!';
               this.removeAttribute('data-edit-id');
-              this.reset();
-              // Limpa o preview da imagem
-              const preview = document.getElementById('preview-imagem');
-              preview.src = '';
-              preview.style.display = 'none';
-              // Restaura o required do upload
-              const inputUpload = document.getElementById('imagem_upload');
-              if (inputUpload) {
-                inputUpload.setAttribute('required', 'required');
-              }
+              resetarFormulario();
               carregarListaProdutos();
             } else {
               msg.style.color = 'red';
@@ -173,16 +281,7 @@
             if (res.ok) {
               msg.style.color = 'green';
               msg.textContent = data.message;
-              this.reset();
-              // Limpa o preview da imagem
-              const preview = document.getElementById('preview-imagem');
-              preview.src = '';
-              preview.style.display = 'none';
-              // Restaura o required do upload
-              const inputUpload = document.getElementById('imagem_upload');
-              if (inputUpload) {
-                inputUpload.setAttribute('required', 'required');
-              }
+              resetarFormulario();
               carregarListaProdutos();
             } else {
               msg.style.color = 'red';
@@ -194,6 +293,7 @@
           msg.textContent = 'Erro ao conectar ao servidor.';
         }
       });
+
       carregarListaProdutos();
     }
     document.getElementById('form-login').addEventListener('submit', function(e) {
@@ -254,45 +354,6 @@
         alert('Erro ao remover produto.');
       }
     }
-    window.preencherFormularioEdicao = async function(id) {
-      try {
-        const res = await fetch('/api/produtos');
-        const produtos = await res.json();
-        const p = produtos.find(prod => prod.id === id);
-        if (!p) return alert('Produto não encontrado!');
-        modoEdicao = true;
-        idEditando = id;
-        document.getElementById('titulo-form').textContent = 'Editar Produto';
-        document.getElementById('btn-form').textContent = 'Salvar Alterações';
-        document.getElementById('btn-cancelar').style.display = 'inline-block';
-        document.getElementById('nome').value = p.nome;
-        document.getElementById('preco').value = p.preco;
-        document.getElementById('preco_avista').value = p.preco_avista || '';
-        document.getElementById('marca').value = p.marca;
-        document.getElementById('descricao').value = p.descricao;
-        document.getElementById('descricao_longa').value = p.descricao_longa;
-        document.getElementById('imagem').value = p.imagem;
-        document.getElementById('sabores').value = (p.sabores||[]).join(', ');
-        document.getElementById('tamanhos').value = (p.tamanhos||[]).join(', ');
-        document.getElementById('estoque').value = p.estoque ?? 0;
-        // Mostra a imagem atual
-        if (p.imagem) {
-          const preview = document.getElementById('preview-imagem');
-          preview.src = p.imagem;
-          preview.style.display = 'block';
-        } else {
-          preview.style.display = 'none';
-        }
-        // Remove o required do upload durante edição
-        const inputUpload = document.getElementById('imagem_upload');
-        if (inputUpload) inputUpload.removeAttribute('required');
-        // Salva o id em um atributo do form
-        document.getElementById('form-produto').setAttribute('data-edit-id', id);
-        document.getElementById('msg-produto').textContent = 'Editando produto ID ' + id;
-      } catch {
-        alert('Erro ao buscar produto para edição.');
-      }
-    }
     window.alterarEstoque = async function(id) {
       const novoEstoque = prompt('Digite o novo estoque:');
       if (novoEstoque === null) return;
@@ -314,46 +375,6 @@
         alert('Erro ao atualizar estoque!');
       }
     };
-    // Preview da imagem ao selecionar arquivo e upload real
-    const inputUpload = document.getElementById('imagem_upload');
-    const inputUrl = document.getElementById('imagem');
-    const preview = document.getElementById('preview-imagem');
-    const imgAtual = document.getElementById('imagem-atual');
-    if (inputUpload) {
-      inputUpload.addEventListener('change', async function(e) {
-        const file = e.target.files[0];
-        if (file) {
-          // Preview local
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            preview.src = ev.target.result;
-            preview.style.display = 'block';
-          };
-          reader.readAsDataURL(file);
-
-          // Upload real
-          const formData = new FormData();
-          formData.append('imagem', file);
-          try {
-            const res = await fetch('/api/upload-imagem', {
-              method: 'POST',
-              body: formData
-            });
-            const data = await res.json();
-            if (res.ok && data.url) {
-              inputUrl.value = data.url;
-              console.log('Imagem enviada com sucesso:', data.url);
-            } else {
-              inputUrl.value = '';
-              alert('Erro ao fazer upload da imagem: ' + (data.error || 'Erro desconhecido'));
-            }
-          } catch (err) {
-            inputUrl.value = '';
-            alert('Erro ao fazer upload da imagem!');
-          }
-        }
-      });
-    }
   </script>
 </body>
 </html> 

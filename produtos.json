@@ -40,5 +40,21 @@
     "relacionados": [
       1
     ]
+  },
+  {
+    "nome": "Creatina 3VS ",
+    "preco": 79.9,
+    "marca": "3vs",
+    "descricao": "Creatina 100% pura 3vs",
+    "descricao_longa": "Creatina 100% pura 3vs",
+    "imagem": "/imgs/produto-1750855953074-613943901.png",
+    "sabores": [
+      "Natural"
+    ],
+    "tamanhos": [
+      "300g"
+    ],
+    "estoque": 3,
+    "id": 3
   }
 ]
