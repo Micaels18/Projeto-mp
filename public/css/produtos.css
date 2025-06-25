@@ -232,7 +232,7 @@ header {
   z-index: 1000;
 }
 
-/* Zera margens/paddings padrão pra evitar “sulcos” */
+/* Zera margens/paddings padrão pra evitar "sulcos" */
 body, html {
   margin: 0;
   padding: 0;
@@ -251,7 +251,7 @@ main {
   z-index: 10;            /* acima da grid, porém abaixo do header */
 }
 
-/* 4. Grid de produtos “desgrudada” do filtro */
+/* 4. Grid de produtos "desgrudada" do filtro */
 .grid-produtos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

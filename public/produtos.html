@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Matéria Prima Triunfo</title>
   <link rel="stylesheet" href="css/produtos.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>
@@ -19,9 +20,9 @@
             <div class="carrinho-icon" onclick="abrirCarrinho()">
                 Carrinho🛒 <span id="quantidade-carrinho">0</span>
             </div>
+            <div id="usuario-logado" class="usuario-logado-header"></div>
         </div>
     </header>
-  <div id="usuario-logado" style="margin-left:20px;"></div>
   <aside id="carrinho" class="carrinho">
   <button class="fechar" onclick="fecharCarrinho()">Fechar</button>
   <button id="btn-checkout">Finalizar Compra</button>
@@ -43,8 +44,10 @@
     </select>
   </section>
   <div id="admin-cadastrar-produto"></div>
-  <div class="grid-produtos" id="grid-produtos">
-    <!-- Os cards de produtos serão inseridos aqui via JS -->
+  <div class="produtos-bg-grain">
+    <div class="grid-produtos" id="grid-produtos">
+      <!-- Os cards de produtos serão inseridos aqui via JS -->
+    </div>
   </div>
 </main>
 
@@ -72,9 +75,9 @@
           }
         } catch {}
       }
-      el.innerHTML = `Bem-vindo, <b>${nome || usuarioEmail}</b> <button onclick="logout()">Sair</button>`;
+      el.innerHTML = `<b>${nome || usuarioEmail}</b> <button onclick="logout()">Sair</button>`;
     } else if (el) {
-      el.innerHTML = `<a href="login.html">Entrar</a> | <a href="cadastro.html">Cadastrar</a>`;
+      el.innerHTML = `<a href="login.html">Entrar</a> <a href="cadastro.html">Cadastrar</a>`;
     }
   });
 </script>

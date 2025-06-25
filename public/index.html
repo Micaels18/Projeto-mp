@@ -22,7 +22,7 @@
             <div class="carrinho-icon" onclick="abrirCarrinho()">
                 Carrinho🛒 <span id="quantidade-carrinho">0</span>
             </div>
-            <div id="usuario-logado" style="margin-left:20px;"></div>
+            <div id="usuario-logado" class="usuario-logado-header"></div>
         </div>
     </header>
 
@@ -104,10 +104,8 @@
     const usuarioEmail = localStorage.getItem('usuario');
     const el = document.getElementById('usuario-logado');
     if (usuarioEmail && el) {
-      // Tenta pegar o nome do usuário do localStorage
       let nome = localStorage.getItem('usuario_nome');
       if (!nome) {
-        // Busca o nome do usuário no backend
         try {
           const res = await fetch('/api/usuario_nome?email=' + encodeURIComponent(usuarioEmail));
           if (res.ok) {
@@ -117,9 +115,9 @@
           }
         } catch {}
       }
-      el.innerHTML = `Bem-vindo, <b>${nome || usuarioEmail}</b> <button onclick="logout()">Sair</button>`;
+      el.innerHTML = `<b>${nome || usuarioEmail}</b> <button onclick="logout()">Sair</button>`;
     } else if (el) {
-      el.innerHTML = `<a href="login.html">Entrar</a> | <a href="cadastro.html">Cadastrar</a>`;
+      el.innerHTML = `<a href="login.html">Entrar</a> <a href="cadastro.html">Cadastrar</a>`;
     }
   });
 </script>

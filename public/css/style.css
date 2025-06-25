@@ -320,6 +320,88 @@ footer {
   min-width: 200px;
 }
 
+.usuario-logado-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 120px;
+  margin-left: 18px;
+  font-size: 1rem;
+  gap: 10px;
+}
+.usuario-logado-header a {
+  color: #FFD700;
+  background: #181818;
+  border: 1px solid #FFD700;
+  border-radius: 5px;
+  padding: 5px 14px;
+  margin-left: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s;
+}
+.usuario-logado-header a:hover {
+  background: #FFD700;
+  color: #181818;
+}
+.usuario-logado-header b {
+  color: #FFD700;
+  font-weight: bold;
+  margin-right: 6px;
+}
+.usuario-logado-header button {
+  background: #FFD700;
+  color: #181818;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: background 0.2s;
+}
+.usuario-logado-header button:hover {
+  background: #e6c200;
+}
+@media (max-width: 600px) {
+  .usuario-logado-header {
+    font-size: 0.97rem;
+    min-width: 80px;
+    gap: 5px;
+  }
+  .usuario-logado-header a, .usuario-logado-header button {
+    padding: 4px 8px;
+    font-size: 0.97rem;
+  }
+}
+
+.btn-voltar-home {
+  background: #FFD700;
+  color: #181818;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 8px 22px;
+  margin-bottom: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 1px 4px #0002;
+  display: block;
+  width: 100%;
+}
+.btn-voltar-home:hover {
+  background: #e6c200;
+  color: #000;
+}
+@media (max-width: 600px) {
+  .btn-voltar-home {
+    font-size: 0.97rem;
+    padding: 7px 8px;
+  }
+}
+
 
 
 
