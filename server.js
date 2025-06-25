@@ -3,7 +3,7 @@ const cors = require('cors');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 const fs = require('fs');
 const path = require('path');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const multer = require('multer');
 
 // Configuração do multer para upload de imagens
