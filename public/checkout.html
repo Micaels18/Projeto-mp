@@ -8,7 +8,39 @@
   <style>
     body { background: #121212; color: #fff; }
     .checkout-box { max-width: 400px; margin: 80px auto; background: #181818; border-radius: 10px; box-shadow: 0 2px 8px #0002; padding: 32px 24px; }
-    input, button, .mp-field { width: 100%; margin-bottom: 12px; padding: 10px; border-radius: 5px; border: none; font-size: 1rem; }
+    input, button, .mp-field, .mp-form-control, .mp-input, .mp-label {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+      background: #fff;
+      color: #181818;
+      box-sizing: border-box;
+    }
+    .mp-label {
+      color: #888;
+      font-size: 1rem;
+      margin-bottom: 2px;
+      font-weight: normal;
+    }
+    .mp-form-control {
+      background: #fff;
+      border-radius: 5px;
+      margin-bottom: 12px;
+      border: none;
+      box-shadow: none;
+    }
+    .mp-input {
+      background: #fff;
+      color: #181818;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      padding: 10px;
+      box-sizing: border-box;
+    }
     button { background: #FFD700; color: #181818; font-weight: bold; cursor: pointer; transition: background 0.2s; }
     button:hover { background: #e6c200; }
     #resultado { margin-top: 18px; font-size: 0.97rem; word-break: break-all; }
