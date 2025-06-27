@@ -128,6 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       grid.innerHTML = '';
       produtos.forEach(produto => {
+        // Criar um wrapper para o card e o botão
+        const wrapper = document.createElement('div');
+        wrapper.className = 'produto-wrapper';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.marginBottom = '32px';
+
         const card = document.createElement('div');
         card.className = 'card';
         card.setAttribute('data-categoria', produto.categoria || 'outros');
@@ -137,15 +145,13 @@ document.addEventListener('DOMContentLoaded', () => {
           <button onclick="removerProduto(${produto.id});event.stopPropagation();" style="background:#c00;color:#fff;margin-top:6px;">Remover</button>
           <button onclick="alterarEstoque(${produto.id});event.stopPropagation();" style="background:#FFD700;color:#000;margin-top:6px;">Alterar Estoque</button>` : '';
         
-        console.log(`Produto ${produto.id}: adminButtons = ${adminButtons ? 'SIM' : 'NÃO'}`);
-        
         card.innerHTML = `
           <img src="${produto.imagem}" alt="${produto.nome}">
-          <h3>${produto.nome}</h3>
-          <p>${produto.descricao || ''}</p>
-          <span>R$ ${produto.preco ? produto.preco.toFixed(2) : '0,00'}</span>
-          <div>Estoque: <span id="estoque-${produto.id}">${produto.estoque ?? 0}</span></div>
-          <button onclick="adicionarAoCarrinho('${produto.nome}', ${produto.preco})">Adicionar</button>
+          <div class="card-legenda">
+            <h3>${produto.nome}</h3>
+            <span>R$ ${produto.preco ? produto.preco.toFixed(2) : '0,00'}</span>
+          </div>
+          <button class='btn-carrinho' type='button'>Adicionar ao Carrinho</button>
           ${adminButtons}
         `;
         card.onclick = function(e) {
@@ -153,7 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
           if (e.target.tagName === 'BUTTON' && window.isAdmin) return;
           abrirProduto(produto.id);
         };
-        grid.appendChild(card);
+        // Adicionar evento ao botão
+        card.querySelector('.btn-carrinho').onclick = function(e) {
+          e.stopPropagation();
+          adicionarAoCarrinho(produto.nome, produto.preco);
+        };
+        wrapper.appendChild(card);
+
+        grid.appendChild(wrapper);
       });
     } catch (err) {
       grid.innerHTML = '<p>Erro ao carregar produtos.</p>';

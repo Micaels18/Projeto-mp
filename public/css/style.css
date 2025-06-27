@@ -120,6 +120,16 @@ nav ul li a:hover {
     gap: 20px;
 }
 
+.produtos-destaque {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 240px));
+    gap: 10px;
+    align-items: start;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .card {
     background-color: #1f1f1f;
     border-radius: 10px;
@@ -130,6 +140,12 @@ nav ul li a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    height: 400px;
+    justify-content: space-between;
+    box-sizing: border-box;
 }
 
 .card:hover {
@@ -313,15 +329,6 @@ footer {
   }
 }
 
-.produtos-destaque {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: stretch;
-  gap: 24px;
-  margin-bottom: 32px;
-}
-
 .produtos-destaque .card {
   flex: 1 1 220px;
   max-width: 260px;
@@ -408,6 +415,29 @@ footer {
     font-size: 0.97rem;
     padding: 7px 8px;
   }
+}
+
+.produtos-destaque .card button {
+    width: 100%;
+    background-color: #FFD700;
+    color: #181818;
+    border: none;
+    padding: 14px 0;
+    border-radius: 0 0 10px 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    margin-top: auto;
+    position: static;
+}
+
+.produtos-destaque .card:hover button,
+.produtos-destaque .card:focus-within button {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 

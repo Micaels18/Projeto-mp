@@ -124,11 +124,24 @@ nav ul li a:hover {
     border-radius: 10px;
     padding: 20px;
     text-align: center;
-    transition: transform 0.3s;
+    transition: height 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
+    overflow: visible;
+    height: 400px;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    position: relative;
 }
 
-.card:hover {
-    transform: scale(1.05);
+.card:hover,
+.card:focus-within {
+    height: 470px;
+    box-shadow: 0 8px 32px #0003;
+    z-index: 2;
 }
 
 .card img {
@@ -167,6 +180,28 @@ nav ul li a:hover {
 .card button:hover {
     background-color: #e6c200;
     transform: translate(-3px, -3px);
+}
+
+.btn-carrinho {
+    width: 100%;
+    background-color: #FFD700;
+    color: #181818;
+    border: none;
+    padding: 14px 0;
+    border-radius: 0 0 10px 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    margin-top: auto;
+}
+
+.card:hover .btn-carrinho,
+.card:focus-within .btn-carrinho {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* Carrinho */
@@ -254,38 +289,51 @@ main {
 /* 4. Grid de produtos "desgrudada" do filtro */
 .grid-produtos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  list-style: none;
-  padding: 0;
-  margin: 1rem auto;      /* 1rem de distância da seção de filtro, centraliza */
-  max-width: 1200px;      /* cascate com .filtro pra alinhar */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 240px));
+  gap: 10px;
+  align-items: start;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Wrapper dos cards e botão */
-.grid-produtos > div {
+.produto-wrapper > button {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.produto-wrapper > .card:hover + button,
+.produto-wrapper > .card:focus-within + button {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.card-legenda {
+    height: 120px; /* ajuste conforme necessário */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 10px;
 }
 
-/* Botão fora do card */
-.grid-produtos > div > button {
-    margin-top: 12px;
-    background-color: #FFD700;
-    color: #000;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: 0.3s;
+.card-legenda h3, .card-legenda p, .card-legenda span, .card-legenda div {
+    margin: 0 0 4px 0;
+    max-width: 100%;
+    text-align: center;
+    word-break: break-word;
 }
 
-.grid-produtos > div > button:hover {
-    background-color: #e6c200;
-    transform: translate(-3px, -3px);
+.card-legenda p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* número de linhas visíveis */
+    -webkit-box-orient: vertical;
+    max-width: 100%;
 }
 
 

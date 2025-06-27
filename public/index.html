@@ -55,21 +55,21 @@
                     <span>R$ 129,90</span>
                     <button onclick="adicionarAoCarrinho('Whey Protein Probiótica', 129.90)">Adicionar</button>
                 </div>
-                <div class="card" data-categoria="creatina">
+                <div class="card" data-categoria="creatina" data-id="2">
                     <img src="imgs/Creatina-mp.png" alt="Creatina">
                     <h3>Creatina Matéria Prima</h3>
                     <p>Mais força, resistência e performance nos treinos.</p>
                     <span>R$ 49,90</span>
                     <button onclick="adicionarAoCarrinho('Creatina', 89.90)">Adicionar</button>
                 </div>
-                <div class="card" data-categoria="pre-treino">
+                <div class="card" data-categoria="pre-treino" data-id="3">
                     <img src="imgs/pancada.png" alt="Pré-treino">
                     <h3>Pré-Treino Pancada</h3>
                     <p>Energia explosiva para treinos de alto desempenho.</p>
                     <span>R$ 79,90</span>
                     <button onclick="adicionarAoCarrinho('Pré-Treino Insano', 119.90)">Adicionar</button>
                 </div>
-                <div class="card" data-categoria="creatina">
+                <div class="card" data-categoria="creatina" data-id="4">
                     <img src="imgs/creatina-3vs.png" alt="creatina-3vs">
                     <h3>Creatina 100% Pura 3VS</h3>
                     <p>Creatin Pura para aumentar seu desempenho</p>
@@ -119,6 +119,18 @@
     } else if (el) {
       el.innerHTML = `<a href="login.html">Entrar</a> <a href="cadastro.html">Cadastrar</a>`;
     }
+
+    // Torna os cards clicáveis para abrir detalhes
+    document.querySelectorAll('.produtos-destaque .card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Evita conflito com o clique do botão
+        if (e.target.tagName === 'BUTTON') return;
+        const id = card.getAttribute('data-id');
+        if (id) {
+          window.location.href = `produto.html?id=${id}`;
+        }
+      });
+    });
   });
 </script>
 </body>
