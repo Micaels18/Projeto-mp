@@ -262,4 +262,30 @@ main {
   max-width: 1200px;      /* cascate com .filtro pra alinhar */
 }
 
+/* Wrapper dos cards e botão */
+.grid-produtos > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+/* Botão fora do card */
+.grid-produtos > div > button {
+    margin-top: 12px;
+    background-color: #FFD700;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.grid-produtos > div > button:hover {
+    background-color: #e6c200;
+    transform: translate(-3px, -3px);
+}
+
 
