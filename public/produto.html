@@ -10,12 +10,12 @@
       display: flex;
       flex-wrap: wrap;
       max-width: 1100px;
-      margin: 80px auto 0 auto;
+      margin: 90px auto 0 auto;
       background: #181818;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px #0002;
-      padding: 32px 24px;
-      gap: 32px;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px #0003;
+      padding: 40px 32px;
+      gap: 40px;
       align-items: flex-start;
       justify-content: flex-start;
     }
@@ -23,20 +23,35 @@
       flex: 1 1 380px;
       min-width: 320px;
       text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
     .produto-imagem {
       flex: 1 1 320px;
       min-width: 300px;
       display: flex;
       align-items: flex-start;
-      justify-content: flex-start;
+      justify-content: center;
     }
     .produto-imagem img {
       max-width: 340px;
       max-height: 340px;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #fff;
-      box-shadow: 0 2px 8px #0001;
+      box-shadow: 0 2px 12px #0002;
+      padding: 10px;
+    }
+    .produto-info h1 {
+      color: #FFD700;
+      font-size: 2.1rem;
+      font-weight: bold;
+      margin-bottom: 0.2em;
+    }
+    .produto-info .marca {
+      color: #FFD700bb;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
     }
     .produto-preco {
       color: #FFD700;
@@ -46,25 +61,51 @@
     }
     .produto-preco-parcela {
       color: #FFD700bb;
-      font-size: 1rem;
+      font-size: 1.1rem;
       margin-bottom: 8px;
     }
+    .produto-var {
+      margin: 10px 0 0 0;
+      font-size: 1.05rem;
+      color: #FFD700;
+      font-weight: bold;
+    }
+    .produto-var label {
+      margin-right: 8px;
+    }
+    .produto-var select, .produto-var button {
+      margin: 0 6px 8px 0;
+      padding: 6px 16px;
+      border-radius: 5px;
+      border: 1.5px solid #FFD700;
+      background: #181818;
+      color: #FFD700;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: border 0.2s, background 0.2s;
+    }
+    .produto-var select:focus, .produto-var button:focus {
+      border: 1.5px solid #e6c200;
+      background: #222;
+    }
     .produto-btns {
-      margin: 18px 0 0 0;
+      margin: 22px 0 0 0;
       display: flex;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
     }
     .produto-btns button {
       background: #FFD700;
       color: #181818;
       border: none;
-      padding: 12px 24px;
-      border-radius: 5px;
-      font-size: 16px;
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-size: 1.1rem;
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s;
+      box-shadow: 0 2px 8px #FFD70022;
     }
     .produto-btns button:hover {
       background: #e6c200;
@@ -79,12 +120,14 @@
     .produto-detalhes {
       margin-top: 32px;
       background: #222;
-      border-radius: 8px;
-      padding: 18px;
+      border-radius: 10px;
+      padding: 22px;
+      box-shadow: 0 1px 8px #0002;
     }
     .produto-detalhes h2 {
       color: #FFD700;
       margin-bottom: 10px;
+      font-size: 1.2rem;
     }
     .produto-relacionados {
       max-width: 1100px;
@@ -126,8 +169,11 @@
     }
     a { color: #FFD700; }
     @media (max-width: 900px) {
-      .produto-container { flex-direction: column; align-items: center; }
+      .produto-container { flex-direction: column; align-items: center; padding: 18px 4vw; gap: 18px; }
       .produto-imagem, .produto-info { min-width: 220px; }
+      .produto-imagem img { max-width: 90vw; max-height: 220px; }
+      .produto-btns button { padding: 10px 12px; font-size: 1rem; }
+      .produto-detalhes { padding: 12px; }
     }
   </style>
 </head>
@@ -148,6 +194,15 @@
       <div id="usuario-logado" class="usuario-logado-header"></div>
     </div>
   </header>
+  <aside id="carrinho" class="carrinho">
+    <button class="fechar" onclick="fecharCarrinho()">Fechar</button>
+    <button id="btn-checkout">Finalizar Compra</button>
+    <h2>Seu Carrinho</h2>
+    <ul id="lista-carrinho"></ul>
+    <div class="total">
+      Total: <span id="total">R$ 0,00</span>
+    </div>
+  </aside>
   <button class="btn-voltar" onclick="history.back()">&larr; Voltar</button>
   <div class="produto-container" id="produto-container"></div>
   <div class="produto-relacionados">
@@ -184,9 +239,9 @@
           </select>
           <br>
           <label for="tamanho">Selecione o tamanho:</label><br>
-          ${(produto.tamanhos||[]).map(t => `<button style='margin:4px 4px 8px 0; padding:6px 16px; border-radius:5px; border:1px solid #FFD700; background:#181818; color:#FFD700;'>${t}</button>`).join('')}
+          ${(produto.tamanhos||[]).map(t => `<button style='margin:4px 4px 8px 0; padding:6px 16px; border-radius:5px; border:1.5px solid #FFD700; background:#181818; color:#FFD700;'>${t}</button>`).join('')}
           <div class="produto-btns">
-            <button onclick="adicionarAoCarrinho('${produto.nome}', ${produto.preco})">ADICIONAR AO CARRINHO</button>
+            <button id="btn-add-carrinho">ADICIONAR AO CARRINHO</button>
             ${window.isAdmin ? `<button onclick="editarProduto(${produto.id})" style="background:#FFD700;color:#000;margin-left:10px;">Editar</button>\n            <button onclick="removerProduto(${produto.id})" style="background:#c00;color:#fff;margin-left:10px;">Remover</button>\n            <button onclick="alterarEstoque(${produto.id})" style="background:#FFD700;color:#000;margin-left:10px;">Alterar Estoque</button>` : ''}
           </div>
           <div style='margin-top:10px;'>Estoque: <span id="estoque-produto">${produto.estoque ?? 0}</span></div>
@@ -196,6 +251,15 @@
           </div>
         </div>
       `;
+      // Adiciona evento ao botão de adicionar ao carrinho
+      setTimeout(() => {
+        const btn = document.getElementById('btn-add-carrinho');
+        if (btn) {
+          btn.onclick = function() {
+            adicionarAoCarrinho(produto.nome, Number(produto.preco));
+          };
+        }
+      }, 0);
       // Relacionados
       const res = await fetch('/api/produtos');
       const produtos = await res.json();
