@@ -48,10 +48,14 @@ function exibirResumoCarrinho() {
   let total = 0;
   try {
     carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-    total = parseFloat(localStorage.getItem('checkout_total')) || 0;
+    total = Number(localStorage.getItem('checkout_total')) || 0;
   } catch {
     carrinho = [];
     total = 0;
+  }
+  if (!carrinho.length || !total) {
+    resumoDiv.innerHTML = '<div style="color:#FFD700;font-weight:bold;">Carrinho vazio ou erro ao carregar total. Volte e tente novamente.</div>';
+    return;
   }
   let html = '<h2>Resumo do Carrinho</h2><ul>';
   carrinho.forEach(item => {

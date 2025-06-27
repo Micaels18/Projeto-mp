@@ -74,9 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Seu carrinho está vazio.');
         return;
       }
-      // Salva o valor total do carrinho no localStorage
-      localStorage.setItem('checkout_total', total.toString());
-      // Redireciona para o checkout transparente
+      // Salva o valor total do carrinho no localStorage de forma robusta
+      localStorage.setItem('checkout_total', String(Number(total)));
       window.location.href = 'checkout.html';
     });
   }
