@@ -234,44 +234,17 @@ app.post('/api/upload-imagem', upload.single('imagem'), (req, res) => {
   }
 });
 
-// ROTA DE PAGAMENTO TRANSPARENTE (Checkout Custom)
+// Rota para pagamento com Mercado Pago (simulação)
 app.post('/api/pagar', async (req, res) => {
   const { token, email, valor, identificationNumber } = req.body;
-  try {
-    const response = await fetch('https://api.mercadopago.com/v1/payments', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.MP_ACCESS_TOKEN}`
-      },
-      body: JSON.stringify({
-        transaction_amount: valor,
-        token,
-        description: 'Compra na Matéria Prima Triunfo',
-        installments: 1,
-        payment_method_id: 'visa', // ou detecte dinamicamente
-        payer: {
-          email,
-          identification: {
-            type: 'CPF',
-            number: identificationNumber
-          }
-        }
-      })
-    });
-    const payment = await response.json();
-    if (!response.ok) {
-      // Repasse todos os detalhes do erro para o frontend
-      return res.status(response.status).json({
-        error: payment.error || payment.message || 'Erro desconhecido',
-        cause: payment.cause || null,
-        status: payment.status || response.status
-      });
-    }
-    res.json(payment);
-  } catch (err) {
-    res.status(500).json({ error: err.message || 'Erro inesperado no servidor.' });
+  // Aqui você pode integrar com o SDK do Mercado Pago se quiser pagamento real
+  // Por enquanto, retorna sucesso fake para teste
+  if (!token || !email || !valor || !identificationNumber) {
+    return res.status(400).json({ error: 'Dados incompletos para pagamento.' });
   }
+  // Simula um pequeno delay
+  await new Promise(r => setTimeout(r, 800));
+  res.json({ status: 'success', message: 'Pagamento simulado com sucesso!', valor, email });
 });
 
 // Middleware para tratar erros do multer
