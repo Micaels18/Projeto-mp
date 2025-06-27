@@ -1,7 +1,7 @@
 const mp = new MercadoPago('APP_USR-51377fc6-7726-40cc-870a-81197141baf6');
 
 const stylePadrao = {
-  base: {
+  input: {
     color: "#181818",
     fontSize: "1rem",
     backgroundColor: "#fff",
@@ -9,18 +9,11 @@ const stylePadrao = {
     border: "none",
     padding: "10px",
     fontFamily: "Raleway, Arial, sans-serif",
-    '::placeholder': {
-      color: "#888"
-    }
   },
-  focus: {
-    color: "#181818",
-    backgroundColor: "#f7f7f7"
-  },
-  empty: {
+  label: {
     color: "#888"
   },
-  invalid: {
+  error: {
     color: "#c0392b"
   }
 };
