@@ -76,7 +76,11 @@ form.onsubmit = async function(e) {
       return;
     }
     let valor = parseFloat(localStorage.getItem('checkout_total'));
-    if (!valor || isNaN(valor)) valor = 100;
+    console.log('Valor enviado para pagamento:', valor);
+    if (!valor || isNaN(valor) || valor <= 0) {
+      document.getElementById('resultado').innerText = 'Erro: valor do pagamento inválido!';
+      return;
+    }
     const res = await fetch('/api/pagar', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
