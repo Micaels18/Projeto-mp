@@ -169,6 +169,18 @@ nav ul li a:hover {
     margin: 0 auto;
 }
 
+.grid-produtos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.grid-produtos > * {
+    flex: 0 1 240px;
+}
+
 .card {
     background-color: #181818;
     border-radius: 12px;
