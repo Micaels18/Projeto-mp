@@ -63,7 +63,12 @@ const form = document.getElementById('form-pagamento');
 form.onsubmit = async function(e) {
   e.preventDefault();
   try {
-    const token = await mp.fields.createCardToken({});
+    const cardholderName = document.getElementById('form-checkout__cardholderName').value;
+    if (!cardholderName) {
+      document.getElementById('resultado').innerText = 'Preencha o nome impresso no cartão!';
+      return;
+    }
+    const token = await mp.fields.createCardToken({ cardholderName });
     // Pega o e-mail do usuário logado do localStorage
     const email = localStorage.getItem('usuario');
     if (!email) {
@@ -73,11 +78,6 @@ form.onsubmit = async function(e) {
     const identificationNumber = document.getElementById('form-checkout__identificationNumber').value;
     if (!identificationNumber) {
       document.getElementById('resultado').innerText = 'Preencha o CPF!';
-      return;
-    }
-    const cardholderName = document.getElementById('form-checkout__cardholderName').value;
-    if (!cardholderName) {
-      document.getElementById('resultado').innerText = 'Preencha o nome impresso no cartão!';
       return;
     }
     let valor = parseFloat(localStorage.getItem('checkout_total'));
@@ -94,8 +94,7 @@ form.onsubmit = async function(e) {
         token: token.id,
         email,
         valor,
-        identificationNumber,
-        cardholderName
+        identificationNumber
       })
     });
     const data = await res.json();
