@@ -256,8 +256,14 @@ app.post('/api/pagar', async (req, res) => {
           identification: {
             type: "CPF",
             number: identificationNumber
-          },
-          name: cardholderName
+          }
+        },
+        cardholder: {
+          name: cardholderName,
+          identification: {
+            type: "CPF",
+            number: identificationNumber
+          }
         }
       }
     });
