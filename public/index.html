@@ -104,6 +104,12 @@
       });
     });
   });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof carregarProdutos === 'function') {
+      carregarProdutos();
+    }
+  });
 </script>
 </body>
 </html>
