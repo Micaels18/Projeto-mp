@@ -1,20 +1,18 @@
 const mp = new MercadoPago('APP_USR-51377fc6-7726-40cc-870a-81197141baf6');
 
 const stylePadrao = {
-  input: {
+  base: {
     color: "#181818",
     fontSize: "1rem",
     backgroundColor: "#fff",
     borderRadius: "5px",
-    border: "none",
-    padding: "10px",
     fontFamily: "Raleway, Arial, sans-serif",
   },
-  label: {
-    color: "#888"
+  focus: {
+    color: "#FFD700"
   },
-  error: {
-    color: "#c0392b"
+  empty: {
+    color: "#888"
   }
 };
 
@@ -96,6 +94,7 @@ form.onsubmit = async function(e) {
     }
     document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
   } catch (err) {
-    document.getElementById('resultado').innerText = 'Erro inesperado: ' + err.message;
+    console.log('Erro no pagamento:', err);
+    document.getElementById('resultado').innerText = 'Erro inesperado: ' + (err.message || JSON.stringify(err));
   }
 }; 
