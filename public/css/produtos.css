@@ -502,13 +502,14 @@ main {
 
 /* 4. Grid de produtos "desgrudada" do filtro */
 .grid-produtos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 240px));
-  gap: 10px;
-  align-items: start;
-  justify-content: center;
-  max-width: 1200px;
-  margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    align-items: start;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-items: center;
 }
 
 .produto-wrapper > button {
