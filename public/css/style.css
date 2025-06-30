@@ -64,12 +64,12 @@ a:hover {
 /* Header */
 header {
     background-color: #000;
-    padding: 0 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     border-bottom: 3px solid #FFD700;
     position: fixed;
-    height: auto;
+    height: 70px;
     min-height: 70px;
     width: 100%;
     top: 0;
@@ -80,14 +80,19 @@ header {
 
 header .container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding: 0 24px;
     height: 70px;
     flex-wrap: wrap;
+}
+
+.logo, nav, .header-actions {
+    flex-shrink: 1;
+    min-width: 0;
 }
 
 .logo {
@@ -95,10 +100,16 @@ header .container {
     font-weight: bold;
     color: #fff;
     letter-spacing: 1px;
+    margin-right: 32px;
 }
 
 .logo span {
     color: #FFD700;
+}
+
+nav {
+    flex: 2;
+    text-align: center;
 }
 
 nav ul {
@@ -122,6 +133,12 @@ nav ul li a {
 nav ul li a:hover {
     color: #FFD700;
     background: #181818;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .carrinho-icon,
@@ -350,18 +367,28 @@ footer p {
 }
 
 /* Responsividade */
-@media (max-width: 1024px) {
-  .produtos .container {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
+@media (max-width: 1200px) {
   header .container {
     flex-direction: column;
-    gap: 10px;
+    align-items: stretch;
     height: auto;
+    padding: 8px 8px;
   }
-  header {
-    height: auto;
-    padding: 10px 0;
+  nav, .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+  nav ul {
+    justify-content: flex-start;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  .header-actions button, .header-actions a {
+    padding: 6px 10px;
+    font-size: 15px;
   }
 }
 
@@ -532,11 +559,18 @@ footer p {
 @media (max-width: 900px) {
     header .container {
         flex-direction: column;
+        align-items: flex-start;
         height: auto;
-        padding: 0 8px;
+        padding: 8px 8px;
+    }
+    .header-actions {
+        margin-top: 8px;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 4px;
     }
     nav ul {
-        gap: 16px;
+        gap: 12px;
     }
     .logo {
         font-size: 22px;
