@@ -69,7 +69,8 @@ header {
     justify-content: center;
     border-bottom: 3px solid #FFD700;
     position: fixed;
-    height: 70px;
+    height: auto;
+    min-height: 70px;
     width: 100%;
     top: 0;
     left: 0;
@@ -86,6 +87,7 @@ header .container {
     align-items: center;
     padding: 0 24px;
     height: 70px;
+    flex-wrap: wrap;
 }
 
 .logo {
@@ -122,6 +124,15 @@ nav ul li a:hover {
     background: #181818;
 }
 
+.carrinho-icon,
+.usuario-logado-header button,
+.usuario-logado-header a {
+    margin-left: 10px;
+    margin-right: 0;
+    vertical-align: middle;
+    position: static;
+}
+
 .carrinho-icon {
     cursor: pointer;
     font-size: 20px;
@@ -130,7 +141,6 @@ nav ul li a:hover {
     padding: 6px 16px;
     border-radius: 6px;
     font-weight: bold;
-    margin-left: 18px;
     transition: background 0.3s, color 0.3s;
     display: flex;
     align-items: center;
