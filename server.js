@@ -6,6 +6,7 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const fetch = require('node-fetch');
+const cloudinary = require('cloudinary').v2;
 
 // Configuração do multer para upload de imagens
 const storage = multer.diskStorage({
@@ -47,6 +48,12 @@ const PORT = process.env.PORT || 3000;
 
 // Configure com seu access token de teste do Mercado Pago
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
+
+cloudinary.config({
+  cloud_name: 'dtluzzo0x',
+  api_key: '218866377958176',
+  api_secret: 'dTy5QY2HaqR77ouIDZcrwurraQk'
+});
 
 app.use(cors());
 app.use(express.json());
@@ -212,25 +219,21 @@ app.put('/api/admin/produto/:id', (req, res) => {
   res.json({ message: 'Produto atualizado com sucesso!' });
 });
 
-// Rota para upload de imagem
-app.post('/api/upload-imagem', upload.single('imagem'), (req, res) => {
-  console.log('Upload de imagem solicitado');
-  console.log('req.file:', req.file);
-  
+// Rota para upload de imagem usando Cloudinary
+app.post('/api/upload-imagem', upload.single('imagem'), async (req, res) => {
   if (!req.file) {
-    console.log('Erro: Nenhum arquivo enviado');
     return res.status(400).json({ error: 'Nenhum arquivo enviado' });
   }
-  
   try {
-    // Retorna a URL relativa para uso no front-end
-    const url = '/imgs/' + req.file.filename;
-    console.log('URL retornada:', url);
-    
-    res.json({ url });
+    // Envia o arquivo para o Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'produtos' // opcional: cria uma pasta no Cloudinary
+    });
+    // Retorna a URL segura da imagem
+    res.json({ url: result.secure_url });
   } catch (error) {
     console.error('Erro no upload:', error);
-    res.status(500).json({ error: 'Erro interno no servidor: ' + error.message });
+    res.status(500).json({ error: 'Erro ao enviar imagem para o Cloudinary' });
   }
 });
 
