@@ -165,8 +165,8 @@ nav ul li a:hover {
 }
 
 .carrinho-icon:hover {
-    background: #e6c200;
-    color: #000;
+    background: #000;
+    color: #FFD700;
 }
 
 /* Banner */
@@ -496,8 +496,8 @@ footer p {
 }
 
 .usuario-logado-header a:hover, .usuario-logado-header button:hover {
-    background: #e6c200;
-    color: #000;
+    background: #000;
+    color: #FFD700;
 }
 
 .btn-voltar-home {
