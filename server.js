@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MercadoPagoConfig, Preference } = require('mercadopago');
+const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
@@ -234,17 +234,43 @@ app.post('/api/upload-imagem', upload.single('imagem'), (req, res) => {
   }
 });
 
-// Rota para pagamento com Mercado Pago (simulação)
+// Rota para pagamento com Mercado Pago (real)
 app.post('/api/pagar', async (req, res) => {
   const { token, email, valor, identificationNumber } = req.body;
-  // Aqui você pode integrar com o SDK do Mercado Pago se quiser pagamento real
-  // Por enquanto, retorna sucesso fake para teste
+
   if (!token || !email || !valor || !identificationNumber) {
     return res.status(400).json({ error: 'Dados incompletos para pagamento.' });
   }
-  // Simula um pequeno delay
-  await new Promise(r => setTimeout(r, 800));
-  res.json({ status: 'success', message: 'Pagamento simulado com sucesso!', valor, email });
+
+  try {
+    const payment = new Payment(client);
+    const result = await payment.create({
+      body: {
+        transaction_amount: Number(valor),
+        token: token,
+        description: "Compra na loja Projeto MP",
+        installments: 1,
+        payment_method_id: undefined, // O Mercado Pago detecta automaticamente pelo token
+        payer: {
+          email: email,
+          identification: {
+            type: "CPF",
+            number: identificationNumber
+          }
+        }
+      }
+    });
+    res.json({
+      status: result.status,
+      status_detail: result.status_detail,
+      id: result.id,
+      message: result.status === "approved" ? "Pagamento aprovado!" : "Pagamento não aprovado.",
+      raw: result
+    });
+  } catch (error) {
+    console.error('Erro no pagamento:', error);
+    res.status(500).json({ error: error.message || 'Erro ao processar pagamento.' });
+  }
 });
 
 // Middleware para tratar erros do multer
