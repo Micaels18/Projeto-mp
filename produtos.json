@@ -56,5 +56,26 @@
     ],
     "estoque": 3,
     "id": 3
+  },
+  {
+    "nome": "Whey 3VS",
+    "preco": 134.9,
+    "preco_avista": 129.9,
+    "marca": "3vs",
+    "descricao": "Whey Protein 3VS 100% Concentrate – Baunilha",
+    "descricao_longa": "Descubra o sabor suave e irresistível de Baunilha em cada dose do nosso Whey Protein 100% Concentrate da 3VS. Formulado exclusivamente com concentrado de proteína do soro do leite de alta biodisponibilidade, cada porção oferece:\n\n23 g de proteína para suporte à síntese muscular\n\n5 g de BCAAs para recuperação e prevenção de catabolismo\n\nBaixo teor de carboidratos e gorduras, ideal para definição\n\nRápida absorção, garantindo nutrientes no momento certo\n\n35 porções por pote, com dosagem prática e cremosa\n\nPerfeito para tomar logo após o treino ou entre as refeições, promovendo ganho de massa magra, recuperação eficiente e muito sabor. Sem adição de açúcares artificiais, adoçado com sucralose, é a escolha certa para quem busca qualidade e performance diária.",
+    "imagem": "https://res.cloudinary.com/dtluzzo0x/image/upload/v1751305699/produtos/c4phjr1lwovhqzuleefe.png",
+    "sabores": [
+      "Natural",
+      "Baunilha",
+      "Morango",
+      "chocolate",
+      "cookies ´n cream"
+    ],
+    "tamanhos": [
+      "900g"
+    ],
+    "estoque": 10,
+    "id": 4
   }
 ]

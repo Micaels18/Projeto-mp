@@ -164,6 +164,13 @@
           <input type="number" id="preco" placeholder="Preço (ex: 99.90)" step="0.01" required />
           <input type="number" id="preco_avista" placeholder="Preço à vista (opcional)" step="0.01" />
           <input type="text" id="marca" placeholder="Marca" required />
+          <label for="categoria" style="color:#FFD700;">Categoria *</label>
+          <select id="categoria" required style="margin-bottom:8px;">
+            <option value="">Selecione</option>
+            <option value="whey">Whey</option>
+            <option value="creatina">Creatina</option>
+            <option value="pre-treino">Pré-treino</option>
+          </select>
           <textarea id="descricao" placeholder="Descrição curta" required></textarea>
           <textarea id="descricao_longa" placeholder="Descrição longa" required></textarea>
           <label for="imagem_upload" style="display:block;margin:8px 0 4px 0;color:#FFD700;">Imagem do Produto *</label>
@@ -281,6 +288,7 @@
           document.getElementById('preco').value = p.preco;
           document.getElementById('preco_avista').value = p.preco_avista || '';
           document.getElementById('marca').value = p.marca;
+          document.getElementById('categoria').value = p.categoria;
           document.getElementById('descricao').value = p.descricao;
           document.getElementById('descricao_longa').value = p.descricao_longa;
           document.getElementById('imagem').value = p.imagem;
@@ -319,6 +327,7 @@
           preco: parseFloat(document.getElementById('preco').value),
           preco_avista: parseFloat(document.getElementById('preco_avista').value) || undefined,
           marca: document.getElementById('marca').value,
+          categoria: document.getElementById('categoria').value,
           descricao: document.getElementById('descricao').value,
           descricao_longa: document.getElementById('descricao_longa').value,
           imagem: document.getElementById('imagem').value,
