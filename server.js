@@ -236,7 +236,7 @@ app.post('/api/upload-imagem', upload.single('imagem'), (req, res) => {
 
 // Rota para pagamento com Mercado Pago (real)
 app.post('/api/pagar', async (req, res) => {
-  const { token, email, valor, identificationNumber } = req.body;
+  const { token, email, valor, identificationNumber, cardholderName } = req.body;
 
   if (!token || !email || !valor || !identificationNumber) {
     return res.status(400).json({ error: 'Dados incompletos para pagamento.' });
@@ -256,7 +256,8 @@ app.post('/api/pagar', async (req, res) => {
           identification: {
             type: "CPF",
             number: identificationNumber
-          }
+          },
+          name: cardholderName
         }
       }
     });

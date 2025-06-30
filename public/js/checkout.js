@@ -75,6 +75,11 @@ form.onsubmit = async function(e) {
       document.getElementById('resultado').innerText = 'Preencha o CPF!';
       return;
     }
+    const cardholderName = document.getElementById('form-checkout__cardholderName').value;
+    if (!cardholderName) {
+      document.getElementById('resultado').innerText = 'Preencha o nome impresso no cartão!';
+      return;
+    }
     let valor = parseFloat(localStorage.getItem('checkout_total'));
     valor = Math.round((valor + Number.EPSILON) * 100) / 100;
     console.log('Valor enviado para pagamento:', valor);
@@ -89,7 +94,8 @@ form.onsubmit = async function(e) {
         token: token.id,
         email,
         valor,
-        identificationNumber
+        identificationNumber,
+        cardholderName
       })
     });
     const data = await res.json();
