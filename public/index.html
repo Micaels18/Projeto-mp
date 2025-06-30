@@ -48,7 +48,36 @@
     <section class="produtos" id="produtos">
         <div class="container">
             <div class="produtos-destaque">
-                <div id="grid-produtos" class="grid-produtos"></div>
+                <!-- Produtos em destaque fixos -->
+                <div class="card" data-categoria="whey" data-id="1">
+                    <img src="imgs/whey-probiotica.png" alt="Whey Protein">
+                    <h3>Whey Protein Probiótica</h3>
+                    <p>Suplemento de proteína para ganho de massa muscular.</p>
+                    <span>R$ 129,90</span>
+                    <button onclick="adicionarAoCarrinho('Whey Protein Probiótica', 129.90)">Adicionar</button>
+                </div>
+                <div class="card" data-categoria="creatina" data-id="2">
+                    <img src="imgs/Creatina-mp.png" alt="Creatina">
+                    <h3>Creatina Matéria Prima</h3>
+                    <p>Mais força, resistência e performance nos treinos.</p>
+                    <span>R$ 49,90</span>
+                    <button onclick="adicionarAoCarrinho('Creatina', 89.90)">Adicionar</button>
+                </div>
+                <div class="card" data-categoria="pre-treino" data-id="3">
+                    <img src="imgs/pancada.png" alt="Pré-treino">
+                    <h3>Pré-Treino Pancada</h3>
+                    <p>Energia explosiva para treinos de alto desempenho.</p>
+                    <span>R$ 79,90</span>
+                    <button onclick="adicionarAoCarrinho('Pré-Treino Insano', 119.90)">Adicionar</button>
+                </div>
+                <div class="card" data-categoria="creatina" data-id="4">
+                    <img src="imgs/creatina-3vs.png" alt="creatina-3vs">
+                    <h3>Creatina 100% Pura 3VS</h3>
+                    <p>Creatin Pura para aumentar seu desempenho</p>
+                    <span>R$ 79,90</span>
+                    <button onclick="adicionarAoCarrinho('creatina', 79.90)">Adicionar</button>
+                </div>
+                <!-- Fim dos produtos em destaque -->
             </div>
         </div>
     </section>
