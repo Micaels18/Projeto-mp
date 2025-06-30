@@ -253,13 +253,7 @@ app.post('/api/pagar', async (req, res) => {
         payment_method_id: undefined, // O Mercado Pago detecta automaticamente pelo token
         payer: {
           email: email,
-          identification: {
-            type: "CPF",
-            number: identificationNumber
-          }
-        },
-        cardholder: {
-          name: cardholderName,
+          first_name: cardholderName,
           identification: {
             type: "CPF",
             number: identificationNumber
