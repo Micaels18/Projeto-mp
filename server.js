@@ -246,7 +246,7 @@ app.post('/api/pagar', async (req, res) => {
     const payment = new Payment(client);
     const result = await payment.create({
       body: {
-        transaction_amount: Number(valor),
+        transaction_amount: Math.round((Number(valor) + Number.EPSILON) * 100) / 100,
         token: token,
         description: "Compra na loja Projeto MP",
         installments: 1,
