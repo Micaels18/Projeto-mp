@@ -63,7 +63,7 @@ const form = document.getElementById('form-pagamento');
 form.onsubmit = async function(e) {
   e.preventDefault();
   try {
-    const token = await mp.fields.createCardToken();
+    const token = await mp.fields.createCardToken({});
     // Pega o e-mail do usuário logado do localStorage
     const email = localStorage.getItem('usuario');
     if (!email) {
